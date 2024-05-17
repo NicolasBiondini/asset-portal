@@ -1,32 +1,35 @@
+import { useUIState } from "@/data/wallet/storage";
+import { useAssets } from "@/query/wallet/assets";
+import { AssetMetadata } from "@/types/asset";
 import { ApiPromise, WsProvider } from "@polkadot/api";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {};
 
 function Balances({}: Props) {
-  const getBalances = async () => {
-    const wsProvider = new WsProvider(
-      "wss://asset-hub-polkadot-rpc.dwellir.com/"
-    );
-    const api = await ApiPromise.create({ provider: wsProvider });
+  const { isLoading, assetsMetadata: assets } = useAssets();
 
-    return api;
-  };
+  return (
+    <div>
+      <p>Balances</p>
 
-  useEffect(() => {
-    getBalances()
-      .then((api: ApiPromise) => {
-        api.query.assets.metadata(100).then((data) => {
-          console.log(data.toHuman());
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        console.log("Error trying to fetch the blockchain.");
-      });
-  }, []);
-
-  return <div>Balances</div>;
+      <div className="flex flex-col gap-7">
+        {isLoading || assets.length === 0 ? (
+          <h1>Loading..</h1>
+        ) : (
+          assets.map((asset) => {
+            return (
+              <div key={asset.id} className="w-full gap-2 flex flex-col">
+                <p>Symbol: {asset.info.symbol}</p>
+                <p>Name: {asset.info.name}</p>
+                <p>Decimals: {asset.info.decimals}</p>
+              </div>
+            );
+          })
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default Balances;
