@@ -1,5 +1,6 @@
+import { useConnectionState } from "@/data/connection/storage";
 import { useUIState } from "@/data/wallet/storage";
-import { useConection } from "@/hooks/useConection";
+import { useConnection } from "@/hooks/useConnection";
 import { AssetMetadata } from "@/types/asset";
 import { Balance } from "@/types/balance";
 import { ApiPromise } from "@polkadot/api";
@@ -42,37 +43,48 @@ const fetchBalances = async (
     balances["3"] = dotAmount;
   }
 
-  for (const asset of assets) {
-    const assetId = asset.id;
-    try {
-      const assetBalance = (
-        await api.query.assets.account(Number(assetId), address)
-      ).toHuman() as {
-        balance: string;
-        status: string;
-        reason: string;
-        extra: null;
-      };
-      const freeAssetBalanceString = assetBalance.balance
-        .toString()
-        .replace(/,/g, "");
-      const freeAssetBalance =
-        Number(BigInt(freeAssetBalanceString)) /
-        10 ** Number(asset.info.decimals);
-      console.log(
-        `Balance del asset ${assetId}: ${freeAssetBalance
-          .toFixed(4)
-          .toString()} unidades`
-      );
-      balances[assetId] = freeAssetBalance.toFixed(4).toString();
-    } catch (error) {}
-  }
+  const promises = assets
+    .filter((asset) => asset.id !== "3")
+    .map(async (asset) => {
+      const assetId = asset.id;
+      try {
+        const assetBalance = (
+          await api.query.assets.account(Number(assetId), address)
+        ).toHuman() as {
+          balance: string;
+          status: string;
+          reason: string;
+          extra: null;
+        };
+        const freeAssetBalanceString = assetBalance.balance
+          .toString()
+          .replace(/,/g, "");
+        const freeAssetBalance =
+          Number(BigInt(freeAssetBalanceString)) /
+          10 ** Number(asset.info.decimals);
+        return {
+          assetId,
+          freeAssetBalance: freeAssetBalance.toFixed(4).toString(),
+        };
+      } catch (error) {
+        return { assetId, freeAssetBalance: "0" };
+      }
+    });
+
+  // Esperar a que todas las promesas se resuelvan
+  const results = await Promise.all(promises);
+
+  // Actualizar el objeto balances con los resultados
+  results.forEach(({ assetId, freeAssetBalance }) => {
+    balances[assetId] = freeAssetBalance;
+  });
+
   setLoaded(true);
   return balances;
 };
 
 export const useBalances = (address: string) => {
-  const api = useConection();
+  const { api } = useConnectionState();
   const {
     assetsMetadata,
     setBalances,
@@ -88,6 +100,7 @@ export const useBalances = (address: string) => {
   } = useQuery({
     queryKey: ["user", "balances"],
     queryFn: () => fetchBalances(api, address, assetsMetadata, setLoaded),
+    enabled: api !== null && address !== "",
   });
 
   useEffect(() => {

@@ -20,21 +20,27 @@ function Balances({}: Props) {
         {assets.length === 0 ? (
           <h1>Loading..</h1>
         ) : (
-          assets.map((asset) => {
-            return (
-              <div key={asset.id} className="w-full gap-2 flex flex-col">
-                <p>Symbol: {asset.info.symbol}</p>
-                <p>Name: {asset.info.name}</p>
-                <p>Decimals: {asset.info.decimals}</p>
-                <p>Id: {asset.id}</p>
-                {loaded ? (
-                  <p>Balance: {balances[asset.id] || "0"}</p>
-                ) : (
-                  <p>Balance: loading...</p>
-                )}
-              </div>
-            );
-          })
+          assets
+            .sort((a, b) => {
+              const balanceA = Number(balances[a.id]) || 0;
+              const balanceB = Number(balances[b.id]) || 0;
+              return balanceB - balanceA; // Sort in descending order based on balance
+            })
+            .map((asset) => {
+              return (
+                <div key={asset.id} className="w-full gap-2 flex flex-col">
+                  <p>Symbol: {asset.info.symbol}</p>
+                  <p>Name: {asset.info.name}</p>
+                  <p>Decimals: {asset.info.decimals}</p>
+                  <p>Id: {asset.id}</p>
+                  {loaded ? (
+                    <p>Balance: {balances[asset.id] || "0"}</p>
+                  ) : (
+                    <p>Balance: loading...</p>
+                  )}
+                </div>
+              );
+            })
         )}
       </div>
     </div>

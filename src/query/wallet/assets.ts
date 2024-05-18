@@ -1,5 +1,6 @@
+import { useConnectionState } from "@/data/connection/storage";
 import { useUIState } from "@/data/wallet/storage";
-import { useConection } from "@/hooks/useConection";
+import { useConnection } from "@/hooks/useConnection";
 import { AssetMetadata } from "@/types/asset";
 import { ApiPromise } from "@polkadot/api";
 import { useQuery } from "@tanstack/react-query";
@@ -28,8 +29,8 @@ const fetchAssets = async (api: ApiPromise | null) => {
 };
 
 export const useAssets = () => {
-  const api = useConection();
   const { setAssetsMetadata, assetsMetadata } = useUIState();
+  const { api } = useConnectionState();
   const {
     data: assets,
     error,
@@ -39,6 +40,7 @@ export const useAssets = () => {
   } = useQuery({
     queryKey: ["assets"],
     queryFn: () => fetchAssets(api),
+    enabled: api !== null,
   });
 
   useEffect(() => {
