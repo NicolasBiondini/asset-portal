@@ -1,5 +1,6 @@
 import { useUIState } from "@/data/wallet/storage";
 import { useAssets } from "@/query/wallet/assets";
+import { useBalances } from "@/query/wallet/balances";
 import { AssetMetadata } from "@/types/asset";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 import { useEffect, useState } from "react";
@@ -7,14 +8,16 @@ import { useEffect, useState } from "react";
 type Props = {};
 
 function Balances({}: Props) {
-  const { isLoading, assetsMetadata: assets } = useAssets();
+  const { loaded, balances } = useUIState();
+  const { assetsMetadata: assets } = useAssets();
+  useBalances("");
 
   return (
     <div>
       <p>Balances</p>
 
       <div className="flex flex-col gap-7">
-        {isLoading || assets.length === 0 ? (
+        {assets.length === 0 ? (
           <h1>Loading..</h1>
         ) : (
           assets.map((asset) => {
@@ -23,6 +26,12 @@ function Balances({}: Props) {
                 <p>Symbol: {asset.info.symbol}</p>
                 <p>Name: {asset.info.name}</p>
                 <p>Decimals: {asset.info.decimals}</p>
+                <p>Id: {asset.id}</p>
+                {loaded ? (
+                  <p>Balance: {balances[asset.id] || "0"}</p>
+                ) : (
+                  <p>Balance: loading...</p>
+                )}
               </div>
             );
           })

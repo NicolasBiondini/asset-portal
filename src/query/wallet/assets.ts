@@ -13,7 +13,7 @@ const fetchAssets = async (api: ApiPromise | null) => {
     .then((data) => {
       return data.map((token) => {
         return {
-          id: token[0].toHuman()?.toString() || "1",
+          id: token[0].toHuman()?.toString().replace(/,/g, "") || "1",
           info: token[1].toHuman() as {
             decimals: string;
             deposit: string;
