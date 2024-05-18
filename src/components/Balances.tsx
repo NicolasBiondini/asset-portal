@@ -9,19 +9,28 @@ type Props = {};
 
 function Balances({}: Props) {
   const [inputValue, setInputValue] = useState("");
-  const { loaded, balances, address, setAddressList } = useUIState();
+  const { loaded, balances, address, addressList, setAddress, setAddressList } =
+    useUIState();
   const { assetsMetadata: assets } = useAssets();
 
   const handleClick = () => {
     setAddressList(inputValue);
   };
 
-  //
   useBalances();
 
   return (
     <div>
       <p>Balances</p>
+      <div className="flex flex-col gap-2">
+        {addressList.map((address) => {
+          return (
+            <button onClick={() => setAddress(address)} key={address}>
+              {address}
+            </button>
+          );
+        })}
+      </div>
       <div>
         <input
           value={inputValue}
