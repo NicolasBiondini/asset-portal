@@ -83,13 +83,14 @@ const fetchBalances = async (
   return balances;
 };
 
-export const useBalances = (address: string) => {
+export const useBalances = () => {
   const { api } = useConnectionState();
   const {
     assetsMetadata,
     setBalances,
     balances: storedBalances,
     setLoaded,
+    address,
   } = useUIState();
   const {
     data: balances,
@@ -98,14 +99,14 @@ export const useBalances = (address: string) => {
     isSuccess,
     refetch,
   } = useQuery({
-    queryKey: ["user", "balances"],
+    queryKey: ["user", address, "balances"],
     queryFn: () => fetchBalances(api, address, assetsMetadata, setLoaded),
     enabled: api !== null && address !== "",
   });
 
   useEffect(() => {
-    if (api !== null && assetsMetadata.length > 0) refetch();
-  }, [api, refetch, assetsMetadata]);
+    if (api !== null && assetsMetadata.length > 0 && address !== "") refetch();
+  }, [api, refetch, assetsMetadata, address]);
 
   useEffect(() => {
     if (balances !== undefined && Object.keys(balances)?.length > 0) {

@@ -8,14 +8,29 @@ import { useEffect, useState } from "react";
 type Props = {};
 
 function Balances({}: Props) {
-  const { loaded, balances } = useUIState();
+  const [inputValue, setInputValue] = useState("");
+  const { loaded, balances, address, setAddressList } = useUIState();
   const { assetsMetadata: assets } = useAssets();
-  useBalances("");
+
+  const handleClick = () => {
+    setAddressList(inputValue);
+  };
+
+  //
+  useBalances();
 
   return (
     <div>
       <p>Balances</p>
-
+      <div>
+        <input
+          value={inputValue}
+          onChange={(e) => {
+            setInputValue(e.target.value);
+          }}
+        />
+        <button onClick={handleClick}>Set address</button>
+      </div>
       <div className="flex flex-col gap-7">
         {assets.length === 0 ? (
           <h1>Loading..</h1>
@@ -33,10 +48,14 @@ function Balances({}: Props) {
                   <p>Name: {asset.info.name}</p>
                   <p>Decimals: {asset.info.decimals}</p>
                   <p>Id: {asset.id}</p>
-                  {loaded ? (
-                    <p>Balance: {balances[asset.id] || "0"}</p>
+                  {address !== "" ? (
+                    loaded ? (
+                      <p>Balance: {balances[asset.id] || "0"}</p>
+                    ) : (
+                      <p>Balance: loading...</p>
+                    )
                   ) : (
-                    <p>Balance: loading...</p>
+                    <p>Balance: 0</p>
                   )}
                 </div>
               );

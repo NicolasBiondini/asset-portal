@@ -7,10 +7,6 @@ const getInitialStorageState = (): InitialState => {
 
 export const useUIState = create<UIState>()((set) => ({
   ...getInitialStorageState(),
-  // increase: (by) => set((state) => ({ bears: state.bears + by })),
-  // updateStoredNumber: (storedNumber: number) => {
-  //   set((state) => ({ ...state, storedNumber }));
-  // },
   setAssetsMetadata: (assetsMetadata) => {
     set((state) => ({ ...state, assetsMetadata }));
   },
@@ -19,5 +15,18 @@ export const useUIState = create<UIState>()((set) => ({
   },
   setLoaded: (loaded) => {
     set((state) => ({ ...state, loaded }));
+  },
+  setAddress: (address) => {
+    set((state) => ({ ...state, address }));
+  },
+  setAddressList: (address) => {
+    set((state) => ({
+      ...state,
+      address: address,
+      addressList: [...state.addressList, address],
+    }));
+  },
+  setWalletList: (address) => {
+    set((state) => ({ ...state, addressList: [...state.walletList, address] }));
   },
 }));
