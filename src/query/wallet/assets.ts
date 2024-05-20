@@ -25,6 +25,16 @@ const fetchAssets = async (api: ApiPromise | null) => {
         };
       });
     });
+  parsedData.push({
+    id: "DOT",
+    info: {
+      decimals: "10",
+      deposit: "0",
+      isFrozen: false,
+      name: "DOT",
+      symbol: "DOT",
+    },
+  });
   return parsedData;
 };
 

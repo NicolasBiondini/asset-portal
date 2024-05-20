@@ -40,11 +40,11 @@ const fetchBalances = async (
   // Check if DOT balance is different than zero
   if (dotAmount !== "0") {
     // Add DOT native balance
-    balances["3"] = dotAmount;
+    balances["DOT"] = dotAmount;
   }
 
   const promises = assets
-    .filter((asset) => asset.id !== "3")
+    .filter((asset) => asset.id !== "DOT")
     .map(async (asset) => {
       const assetId = asset.id;
       try {

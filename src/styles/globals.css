@@ -2,32 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 300 6.67% 19.22%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 326.67 76.47% 50.59%;
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 331.11 57.07% 42.75%;
+    --secondary-foreground: 331.11 57.07% 10%;
+    --muted: 331.11 57.07% 42.75%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 331.11 57.07% 42.75%;
+    --accent-foreground: 331.11 57.07% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 331.11 57.07% 90%;
+    --input: 331.11 57.07% 90%;
+    --ring: 346.8 77.2% 49.8%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 307.5 5.88% 12.94%;
+    --foreground: 300 6.25% 71.57%;
+    --card: 300 5.41% 17.25%;
+    --card-foreground: 300 6.25% 71.57%;
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 326.67 76.47% 50.59%;
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 331.11 57.07% 42.75%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 12 6.5% 15.1%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 85.7% 97.3%;
+    --border: 331.11 57.07% 42.75%;
+    --input: 331.11 57.07% 42.75%;
+    --ring: 346.8 77.2% 49.8%;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }

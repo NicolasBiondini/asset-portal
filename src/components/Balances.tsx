@@ -4,6 +4,7 @@ import { useBalances } from "@/query/wallet/balances";
 import { AssetMetadata } from "@/types/asset";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 import { useEffect, useState } from "react";
+import { Button } from "./ui/button";
 
 type Props = {};
 
@@ -21,7 +22,8 @@ function Balances({}: Props) {
 
   return (
     <div>
-      <p>Balances</p>
+      <p className="text-colors-pink-dot">Balances</p>
+      <div className="bg-card w-full h-8">hello world</div>
       <div className="flex flex-col gap-2">
         {addressList.map((address) => {
           return (
@@ -38,11 +40,13 @@ function Balances({}: Props) {
             setInputValue(e.target.value);
           }}
         />
-        <button onClick={handleClick}>Set address</button>
+        <Button variant={"outline"} onClick={handleClick}>
+          Set address
+        </Button>
       </div>
       <div className="flex flex-col gap-7">
         {assets.length === 0 ? (
-          <h1>Loading..</h1>
+          <h1 className="text-secondary-pink">Loading..</h1>
         ) : (
           assets
             .sort((a, b) => {
@@ -59,7 +63,9 @@ function Balances({}: Props) {
                   <p>Id: {asset.id}</p>
                   {address !== "" ? (
                     loaded ? (
-                      <p>Balance: {balances[asset.id] || "0"}</p>
+                      <p className="text-dot-pink">
+                        Balance: {balances[asset.id] || "0"}
+                      </p>
                     ) : (
                       <p>Balance: loading...</p>
                     )
