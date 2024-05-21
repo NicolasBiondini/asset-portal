@@ -5,7 +5,7 @@ const getInitialStorageState = (): InitialState => {
   return initialState;
 };
 
-export const useUIState = create<UIState>()((set) => ({
+export const useWalletState = create<UIState>()((set) => ({
   ...getInitialStorageState(),
   setAssetsMetadata: (assetsMetadata) => {
     set((state) => ({ ...state, assetsMetadata }));

@@ -4,6 +4,7 @@
 
 @layer base {
   :root {
+    --font-sans: "Fallback Font", sans-serif; /* Fallback font */
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 300 6.67% 19.22%;
@@ -27,6 +28,7 @@
   }
 
   .dark {
+    --font-sans: "Fallback Font", sans-serif; /* Fallback font */
     --background: 307.5 5.88% 12.94%;
     --foreground: 300 6.25% 71.57%;
     --card: 300 5.41% 17.25%;
@@ -56,4 +58,8 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+body {
+  font-family: var(--font-sans);
 }

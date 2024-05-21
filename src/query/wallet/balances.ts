@@ -1,5 +1,5 @@
 import { useConnectionState } from "@/data/connection/storage";
-import { useUIState } from "@/data/wallet/storage";
+import { useWalletState } from "@/data/wallet/storage";
 import { useConnection } from "@/hooks/useConnection";
 import { AssetMetadata } from "@/types/asset";
 import { Balance } from "@/types/balance";
@@ -91,7 +91,7 @@ export const useBalances = () => {
     balances: storedBalances,
     setLoaded,
     address,
-  } = useUIState();
+  } = useWalletState();
   const {
     data: balances,
     error,

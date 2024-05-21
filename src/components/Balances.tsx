@@ -1,18 +1,21 @@
-import { useUIState } from "@/data/wallet/storage";
+import { useWalletState } from "@/data/wallet/storage";
 import { useAssets } from "@/query/wallet/assets";
 import { useBalances } from "@/query/wallet/balances";
 import { AssetMetadata } from "@/types/asset";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import NavModal from "./NavModal";
+import { useUIState } from "@/data/ui/storage";
 
 type Props = {};
 
 function Balances({}: Props) {
   const [inputValue, setInputValue] = useState("");
   const { loaded, balances, address, addressList, setAddress, setAddressList } =
-    useUIState();
+    useWalletState();
   const { assetsMetadata: assets } = useAssets();
+  const { mode, setMode } = useUIState();
 
   const handleClick = () => {
     setAddressList(inputValue);
@@ -22,6 +25,18 @@ function Balances({}: Props) {
 
   return (
     <div>
+      <NavModal />
+      <Button
+        onClick={() => {
+          if (mode === "dark") {
+            setMode("light");
+          } else {
+            setMode("dark");
+          }
+        }}
+      >
+        Click change mode
+      </Button>
       <p className="text-colors-pink-dot">Balances</p>
       <div className="bg-card w-full h-8">hello world</div>
       <div className="flex flex-col gap-2">
