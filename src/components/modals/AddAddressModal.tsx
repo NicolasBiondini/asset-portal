@@ -30,8 +30,8 @@ function AddAddressModal({ children }: Props) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="dark border-none gap-6">
         <DialogHeader>
-          <DialogTitle className="text-foreground">
-            Add your address.
+          <DialogTitle className="text-foreground ">
+            <p className="font-unbounded"> Add your address.</p>
           </DialogTitle>
           <DialogDescription className="text-sm">
             Please input your address to be able to see your assets on AssetHub.

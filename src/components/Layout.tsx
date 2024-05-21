@@ -7,21 +7,47 @@ import { useWalletState } from "@/data/wallet/storage";
 import { WalletIcon } from "lucide-react";
 import { useUIState } from "@/data/ui/storage";
 import AddAddressModal from "./modals/AddAddressModal";
-
+import { Inter as FontSans, Unbounded } from "next/font/google";
+import { AssetHub } from "./icons/assets";
 type Props = {
   children: JSX.Element | JSX.Element[];
 };
+
+const unbounded = Unbounded({
+  subsets: ["latin"], // puedes agregar otros subsets si es necesario
+  variable: "--font-unbounded", // Nombre de la variable CSS para la fuente
+  weight: ["400", "700"], // Pesos que quieres incluir
+});
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 function Layout({ children }: Props) {
   const { mode } = useUIState();
   const { address, loaded } = useWalletState();
   return (
-    <div className="flex flex-col h-full w-full gap-1">
-      <nav className="flex justify-between px-5 items-center h-[60px]">
+    <main
+      className={cn(
+        "min-h-screen flex flex-col gap-1 bg-background antialiased  text-foreground",
+        fontSans.variable,
+        unbounded.variable,
+        { dark: mode === "dark" }
+      )}
+    >
+      <nav className="flex justify-between px-5 items-center h-[70px] fixed top-0 left-0 w-full !bg-background z-10">
         <NavModal />
-        <h1 className="hidden lg:flex">AssetHubHub</h1>
+        <div className="hidden lg:flex font-unbounded items-center gap-2">
+          <AssetHub className="w-8 h-8" />
+          <h1 className="font-bold">
+            AssetHubHub
+            <span className="text-[10px] font-sans text-colors-pink-dot">
+              beta
+            </span>
+          </h1>
+        </div>
 
-        <div className="flex">
+        <div className="flex font-unbounded">
           {address !== "" ? (
             <>
               <Button
@@ -60,8 +86,8 @@ function Layout({ children }: Props) {
           )}
         </div>
       </nav>
-      <div className="flex w-full h-full">
-        <div className="w-[250px] px-6 hidden lg:flex flex-col gap-2  ">
+      <div className="flex w-full h-full relative">
+        <div className="w-[250px] px-6 hidden lg:flex flex-col gap-2 font-unbounded fixed top-20">
           <Button
             className={cn(
               { dark: mode === "dark" },
@@ -81,9 +107,11 @@ function Layout({ children }: Props) {
             Swap
           </Button>
         </div>
-        <div className="w-full flex flex-col">{children}</div>
+        <div className="w-full flex flex-col justify-center lg:ml-[200px] xl:ml-[250px] mt-[90px] lg:mt-10">
+          {children}
+        </div>
       </div>
-    </div>
+    </main>
   );
 }
 

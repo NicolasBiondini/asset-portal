@@ -86,6 +86,7 @@ const config = {
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
+        unbounded: ["var(--font-unbounded)", ...fontFamily.sans],
       },
     },
   },
