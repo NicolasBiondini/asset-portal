@@ -11,15 +11,10 @@ import { useUIState } from "@/data/ui/storage";
 type Props = {};
 
 function Balances({}: Props) {
-  const [inputValue, setInputValue] = useState("");
   const { loaded, balances, address, addressList, setAddress, setAddressList } =
     useWalletState();
   const { assetsMetadata: assets } = useAssets();
   const { mode, setMode } = useUIState();
-
-  const handleClick = () => {
-    setAddressList(inputValue);
-  };
 
   useBalances();
 
@@ -46,17 +41,6 @@ function Balances({}: Props) {
             </button>
           );
         })}
-      </div>
-      <div>
-        <input
-          value={inputValue}
-          onChange={(e) => {
-            setInputValue(e.target.value);
-          }}
-        />
-        <Button variant={"outline"} onClick={handleClick}>
-          Set address
-        </Button>
       </div>
       <div className="flex flex-col gap-7">
         {assets.length === 0 ? (
