@@ -8,9 +8,8 @@ export default function Home() {
   useConnection();
   return (
     <main
-      className={`flex min-h-screen flex-col items-center gap-7 p-24 ${inter.className}`}
+      className={`flex min-h-screen flex-col items-start gap-7 px-8 lg:px-24 lg:py-14 ${inter.className}`}
     >
-      <h1>hello world</h1>
       <Balances />
     </main>
   );

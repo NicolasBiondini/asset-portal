@@ -65,8 +65,8 @@ function Layout({ children }: Props) {
           <Button
             className={cn(
               { dark: mode === "dark" },
-              { "!bg-colors-bg-light": true },
-              "h-[35px] bg-transparent text-card-foreground font-bold hover:scale-[102%] transition-all hover:bg-card hover:text-white w-full flex justify-start text-xs"
+              { "dark:!bg-colors-bg-light": true },
+              "h-[35px] bg-transparent text-card-foreground font-bold hover:scale-[102%] transition-all hover:bg-colors-font-seconday dark:hover:bg-card hover:text-white w-full flex justify-start text-xs"
             )}
           >
             Home

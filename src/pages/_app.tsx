@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <div
         className={cn(
-          "min-h-screen bg-background font-sans antialiased  text-foreground",
+          "min-h-screen bg-background antialiased  text-foreground",
           fontSans.variable,
           { dark: mode === "dark" }
         )}
