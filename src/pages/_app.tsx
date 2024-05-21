@@ -4,6 +4,7 @@ import type { AppProps } from "next/app";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { useUIState } from "@/data/ui/storage";
+import Layout from "@/components/Layout";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -21,7 +22,9 @@ export default function App({ Component, pageProps }: AppProps) {
           { dark: mode === "dark" }
         )}
       >
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </div>
     </QueryClientProvider>
   );

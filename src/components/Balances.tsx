@@ -25,7 +25,6 @@ function Balances({}: Props) {
 
   return (
     <div>
-      <NavModal />
       <Button
         onClick={() => {
           if (mode === "dark") {
