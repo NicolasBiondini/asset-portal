@@ -10,6 +10,7 @@ import AddAddressModal from "./modals/AddAddressModal";
 import { Inter as FontSans, Unbounded } from "next/font/google";
 import { AssetHub } from "./icons/assets";
 import AddressPill from "./AddressPill";
+import SelectAccount from "./modals/SelectAccount";
 type Props = {
   children: JSX.Element | JSX.Element[];
 };
@@ -36,7 +37,7 @@ function Layout({ children }: Props) {
         { dark: mode === "dark" }
       )}
     >
-      <nav className="flex justify-between px-5 items-center h-[120px] md:h-[70px] fixed top-0 left-0 w-full !bg-background z-10">
+      <nav className="flex justify-between px-5 items-center h-[120px] md:h-[70px] sticky top-0 left-0 w-full !bg-background z-10">
         <NavModal />
         <div className="hidden lg:flex font-unbounded items-center gap-2">
           <AssetHub className="w-8 h-8" />
@@ -53,19 +54,21 @@ function Layout({ children }: Props) {
             <div className="flex flex-col md:flex-row w-full gap-2 items-center">
               <AddressPill address={address} />
               <div className="flex order-first md:order-last">
-                <Button
-                  size={"sm"}
-                  className={cn(
-                    {
-                      "border-r border-background rounded-r-none":
-                        address !== "",
-                    },
-                    " h-8 flex gap-1 items-center justify-center text-xs font-bold"
-                  )}
-                >
-                  <UserIcon className="w-[14px] h-[14px]" />
-                  Accounts
-                </Button>
+                <SelectAccount>
+                  <Button
+                    size={"sm"}
+                    className={cn(
+                      {
+                        "border-r border-background rounded-r-none":
+                          address !== "",
+                      },
+                      " h-8 flex gap-1 items-center justify-center text-xs font-bold"
+                    )}
+                  >
+                    <UserIcon className="w-[14px] h-[14px]" />
+                    Accounts
+                  </Button>
+                </SelectAccount>
                 <AddAddressModal>
                   <Button
                     size={"icon"}
@@ -112,7 +115,7 @@ function Layout({ children }: Props) {
             Swap
           </Button>
         </div>
-        <div className="w-full flex flex-col justify-center lg:ml-[200px] xl:ml-[250px] mt-[130px] md:mt-[90px] lg:mt-10">
+        <div className="w-full flex flex-col justify-center lg:ml-[200px] xl:ml-[250px]  ">
           {children}
         </div>
       </div>
