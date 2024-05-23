@@ -45,9 +45,10 @@ function SelectAccount({ children }: Props) {
           })}
           {walletList.map((wallet) => {
             return (
-              <DialogClose key={wallet} asChild>
-                <Button onClick={() => handleClick(wallet)}>
-                  {shortenAddress(wallet, 9)}
+              <DialogClose key={wallet.address} asChild>
+                <Button onClick={() => handleClick(wallet.address)}>
+                  {shortenAddress(wallet.address, 9)}
+                  <p>{wallet.walletId}</p>
                 </Button>
               </DialogClose>
             );

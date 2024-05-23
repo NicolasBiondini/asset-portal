@@ -4,12 +4,15 @@ import React from "react";
 import Tooltip from "./Tooltip";
 import { Button } from "./ui/button";
 import { copyToClipboard } from "@/helpers/copyToClipboard";
+import { useToast } from "./ui/use-toast";
 
 type Props = {
   address: string;
 };
 
 function AddressPill({ address }: Props) {
+  const { toast } = useToast();
+
   return (
     <div className="w-full h-[32px] md:w-[170px] flex justify-center items-center gap-2 rounded-md bg-colors-bg-secondary border border-colors-bg-light ">
       <Tooltip
@@ -27,7 +30,13 @@ function AddressPill({ address }: Props) {
       <Button
         className="h-full w-[15px] bg-transparent hover:bg-transparent text-colors-font-seconday hover:text-white"
         size={"icon"}
-        onClick={() => copyToClipboard(address)}
+        onClick={() => {
+          copyToClipboard(address);
+          toast({
+            title: "✅ Address copied to clipboard.",
+            variant: "success",
+          });
+        }}
       >
         <CopyIcon className="w-4 h-4" />
       </Button>

@@ -1,5 +1,6 @@
 import { AssetMetadata } from "@/types/asset";
 import { Balance } from "@/types/balance";
+import { Wallet } from "@/types/wallets";
 
 export interface InitialState {
   loaded: boolean;
@@ -7,7 +8,7 @@ export interface InitialState {
   balances: Balance;
   address: string;
   addressList: string[];
-  walletList: string[];
+  walletList: Wallet[];
 }
 
 export interface UIState extends InitialState {
@@ -16,7 +17,7 @@ export interface UIState extends InitialState {
   setLoaded: (loaded: boolean) => void;
   setAddress: (address: string) => void;
   setAddressList: (address: string) => void;
-  setWalletList: (address: string) => void;
+  setWalletList: (address: Wallet) => void;
 }
 
 export const initialState: InitialState = {

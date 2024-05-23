@@ -26,7 +26,11 @@ export const useWalletState = create<UIState>()((set) => ({
       addressList: [...state.addressList, address],
     }));
   },
-  setWalletList: (address) => {
-    set((state) => ({ ...state, addressList: [...state.walletList, address] }));
+  setWalletList: (wallet) => {
+    set((state) => ({
+      ...state,
+      address: wallet.address,
+      walletList: [...state.walletList, wallet],
+    }));
   },
 }));
