@@ -13,7 +13,7 @@ type Props = { handleClose: () => void };
 
 function ConnectWalletButton({ handleClose }: Props) {
   const injectedWindow = window as InjectedWindow;
-  const { setWalletList, walletList } = useWalletState();
+  const { setWalletList, walletList, setLoaded } = useWalletState();
   const { toast } = useToast();
 
   const handleConnect = async (
@@ -38,6 +38,7 @@ function ConnectWalletButton({ handleClose }: Props) {
           variant: "warning",
         });
 
+      setLoaded(false);
       setWalletList({
         walletId,
         address: parseAddress(address[0].address),
@@ -58,7 +59,7 @@ function ConnectWalletButton({ handleClose }: Props) {
   };
 
   return (
-    <div>
+    <div className="flex h-full justify-center flex-col gap-2 w-full">
       {SupportedWallets.map((wallet) => {
         const isInjected = injectedWindow?.injectedWeb3?.[wallet];
 
@@ -70,8 +71,9 @@ function ConnectWalletButton({ handleClose }: Props) {
               href={LINKS.wallets[wallet]}
               target="_blank"
               key={`${wallet}-no-injected`}
+              className="w-full"
             >
-              <Button>
+              <Button variant={"outline"} className="w-full">
                 <Icon className="w-4 h-4" />
                 Install {getWalletCopy.parsedName(wallet)}
               </Button>

@@ -5,7 +5,7 @@ import { Wallet } from "@/types/wallets";
 export interface InitialState {
   loaded: boolean;
   assetsMetadata: AssetMetadata[];
-  balances: Balance;
+  balances: { [key: string]: Balance };
   address: string;
   addressList: string[];
   walletList: Wallet[];
@@ -13,7 +13,7 @@ export interface InitialState {
 
 export interface UIState extends InitialState {
   setAssetsMetadata: (assetsMetadata: AssetMetadata[]) => void;
-  setBalances: (balances: Balance) => void;
+  setBalances: (balances: Balance, address: string) => void;
   setLoaded: (loaded: boolean) => void;
   setAddress: (address: string) => void;
   setAddressList: (address: string) => void;

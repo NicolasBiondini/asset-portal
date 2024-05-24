@@ -10,8 +10,12 @@ export const useWalletState = create<UIState>()((set) => ({
   setAssetsMetadata: (assetsMetadata) => {
     set((state) => ({ ...state, assetsMetadata }));
   },
-  setBalances: (balances) => {
-    set((state) => ({ ...state, balances }));
+  setBalances: (balances, address) => {
+    set((state) => {
+      const prevBalances = state.balances;
+      prevBalances[address] = balances;
+      return { ...state, balances: prevBalances, loaded: true };
+    });
   },
   setLoaded: (loaded) => {
     set((state) => ({ ...state, loaded }));

@@ -130,6 +130,7 @@ const AssetCard = ({
 }) => {
   const { loaded, balances, address } = useWalletState();
   const AssetIcon = getAssetIcon(id);
+
   return (
     <div className="w-full gap-2  flex items-center justify-between px-4 py-2 border rounded-lg border-colors-pink-secondary">
       <div className="flex gap-2  items-center">
@@ -144,7 +145,7 @@ const AssetCard = ({
       {address !== "" ? (
         loaded ? (
           <p className="text-white font-bold ">
-            {balances[id] || "0"}{" "}
+            {balances[address][id] || "0"}{" "}
             <span className="text-[10px] font-light text-colors-font-primary">
               {symbol}
             </span>
@@ -155,7 +156,12 @@ const AssetCard = ({
           </div>
         )
       ) : (
-        <p className="text-white font-bold">0</p>
+        <p className="text-white font-bold">
+          0{" "}
+          <span className="text-[10px] font-light text-colors-font-primary">
+            {symbol}
+          </span>
+        </p>
       )}
     </div>
   );

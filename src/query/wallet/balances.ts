@@ -17,8 +17,7 @@ type DotBalanceResponse = {
 const fetchBalances = async (
   api: ApiPromise | null,
   address: string,
-  assets: AssetMetadata[],
-  setLoaded: (loaded: boolean) => void
+  assets: AssetMetadata[]
 ) => {
   if (api === null) return {};
 
@@ -79,7 +78,6 @@ const fetchBalances = async (
     balances[assetId] = freeAssetBalance;
   });
 
-  setLoaded(true);
   return balances;
 };
 
@@ -100,17 +98,28 @@ export const useBalances = () => {
     refetch,
   } = useQuery({
     queryKey: ["user", address, "balances"],
-    queryFn: () => fetchBalances(api, address, assetsMetadata, setLoaded),
-    enabled: api !== null && address !== "",
+    queryFn: () => fetchBalances(api, address, assetsMetadata),
+    enabled:
+      // the storedBalances[address] === undefined prevent refetching, if you want to refetch invalidate the query
+      // because each time that the user change his address, this refetch
+      api !== null && address !== "" && storedBalances[address] === undefined,
   });
 
   useEffect(() => {
-    if (api !== null && assetsMetadata.length > 0 && address !== "") refetch();
-  }, [api, refetch, assetsMetadata, address]);
+    if (
+      api !== null &&
+      assetsMetadata.length > 0 &&
+      address !== "" &&
+      // same here, preventing refetch and using stored values
+      storedBalances[address] === undefined
+    ) {
+      refetch();
+    }
+  }, [api, refetch, assetsMetadata, address, setLoaded, storedBalances]);
 
   useEffect(() => {
     if (balances !== undefined && Object.keys(balances)?.length > 0) {
-      setBalances(balances);
+      setBalances(balances, address);
     }
-  }, [balances, setBalances]);
+  }, [balances, setBalances, address]);
 };

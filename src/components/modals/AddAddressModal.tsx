@@ -1,5 +1,5 @@
-import dynamic from "next/dynamic";
-
+// import dynamic from "next/dynamic";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
   DialogContent,
@@ -10,14 +10,14 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
-import { WalletIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "../ui/input";
 import { FormEvent, MouseEvent, useState } from "react";
 import { useWalletState } from "@/data/wallet/storage";
-const ConnectWalletButton = dynamic(() => import("../ConnectWalletButton"), {
-  ssr: false,
-});
+import ConnectWalletButton from "../ConnectWalletButton";
+// const ConnectWalletButton = dynamic(() => import("../ConnectWalletButton"), {
+//   ssr: false,
+// });
 type Props = {
   children: JSX.Element | JSX.Element[];
 };
@@ -25,9 +25,10 @@ type Props = {
 function AddAddressModal({ children }: Props) {
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const { setAddressList } = useWalletState();
+  const { setAddressList, setLoaded } = useWalletState();
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoaded(false);
     setAddressList(inputValue);
   };
 
@@ -43,24 +44,47 @@ function AddAddressModal({ children }: Props) {
             Please input your address to be able to see your assets on AssetHub.
           </DialogDescription>
         </DialogHeader>
-        <ConnectWalletButton handleClose={() => setOpen(false)} />
-        <form
-          onSubmit={(e) => handleSubmit(e)}
-          className="flex flex-col gap-2 "
+        <Tabs
+          defaultValue="extensions"
+          className="w-full h-[200px] flex flex-col justify-center relative"
         >
-          <Input
-            value={inputValue}
-            onChange={(e) => {
-              setInputValue(e.target.value);
-            }}
-            placeholder="Address"
-          />
-          <DialogClose asChild>
-            <Button type="submit" size={"lg"} className="">
-              Add address
-            </Button>
-          </DialogClose>
-        </form>
+          <TabsList className="w-full absolute top-2">
+            <TabsTrigger value="extensions" className="w-full">
+              Extensions
+            </TabsTrigger>
+            <TabsTrigger value="read-only" className="w-full">
+              Read only
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent
+            value="extensions"
+            className="absolute top-14 w-full left-0 "
+          >
+            <ConnectWalletButton handleClose={() => setOpen(false)} />
+          </TabsContent>
+          <TabsContent
+            className="absolute top-20 w-full left-0 "
+            value="read-only"
+          >
+            <form
+              onSubmit={(e) => handleSubmit(e)}
+              className="flex flex-col gap-2 w-full"
+            >
+              <Input
+                value={inputValue}
+                onChange={(e) => {
+                  setInputValue(e.target.value);
+                }}
+                placeholder="Address"
+              />
+              <DialogClose asChild>
+                <Button type="submit" size={"lg"} className="">
+                  Add address
+                </Button>
+              </DialogClose>
+            </form>
+          </TabsContent>
+        </Tabs>
       </DialogContent>
     </Dialog>
   );
