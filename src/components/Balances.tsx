@@ -1,5 +1,3 @@
-import dynamic from "next/dynamic";
-
 import { useWalletState } from "@/data/wallet/storage";
 import { useAssets } from "@/query/wallet/assets";
 import { useBalances } from "@/query/wallet/balances";
@@ -17,9 +15,7 @@ import DedIcon from "./icons/assets/DedIcon";
 import { getAssetIcon } from "@/config/icons.config";
 import { Input } from "./ui/input";
 import { parseAddress } from "@/helpers/parseAddress";
-const ConnectWalletButton = dynamic(() => import("./ConnectWalletButton"), {
-  ssr: false,
-});
+
 type Props = {};
 
 function Balances({}: Props) {
@@ -44,7 +40,6 @@ function Balances({}: Props) {
       </Button> */}
       <div className="flex flex-col gap-8 w-full max-w-[1024px] mx-auto">
         <div className="flex flex-col">
-          <ConnectWalletButton />
           <h1 className="text-colors-pink-dot text-xl font-bold font-unbounded">
             Balances
           </h1>

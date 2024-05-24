@@ -9,9 +9,9 @@ import { LINKS } from "@/config/constants";
 import { useWalletState } from "@/data/wallet/storage";
 import { parseAddress } from "@/helpers/parseAddress";
 
-type Props = {};
+type Props = { handleClose: () => void };
 
-function ConnectWalletButton({}: Props) {
+function ConnectWalletButton({ handleClose }: Props) {
   const injectedWindow = window as InjectedWindow;
   const { setWalletList, walletList } = useWalletState();
   const { toast } = useToast();
@@ -47,6 +47,7 @@ function ConnectWalletButton({}: Props) {
         title: "Wallet connected sussesfully 🎉.",
         variant: "success",
       });
+      handleClose();
     } catch (error) {
       toast({
         title: "⚠️ Connection denied by the user.",
@@ -61,6 +62,8 @@ function ConnectWalletButton({}: Props) {
       {SupportedWallets.map((wallet) => {
         const isInjected = injectedWindow?.injectedWeb3?.[wallet];
 
+        const Icon = getWalletCopy.getIcon(wallet);
+
         if (isInjected === undefined)
           return (
             <Link
@@ -68,7 +71,10 @@ function ConnectWalletButton({}: Props) {
               target="_blank"
               key={`${wallet}-no-injected`}
             >
-              <Button>Install {getWalletCopy.parsedName(wallet)}</Button>
+              <Button>
+                <Icon className="w-4 h-4" />
+                Install {getWalletCopy.parsedName(wallet)}
+              </Button>
             </Link>
           );
 
@@ -80,6 +86,7 @@ function ConnectWalletButton({}: Props) {
             key={`${wallet}-injected`}
             disabled={walletList.some((w) => w.walletId === wallet)}
           >
+            <Icon className="w-4 h-4" />
             Connect {getWalletCopy.parsedName(wallet)}
           </Button>
         );
