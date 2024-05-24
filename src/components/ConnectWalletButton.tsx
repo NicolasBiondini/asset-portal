@@ -119,7 +119,7 @@ const WalletButton = ({
       >
         <Button
           variant={"outline"}
-          className="w-full h-full flex flex-col gap-2 relative"
+          className="w-full h-full flex flex-col gap-2 relative text-colors-font-primary"
         >
           <Icon className="h-4 w-4 sm:w-8 sm:h-8" />
           <div className="flex flex-col">
@@ -140,7 +140,7 @@ const WalletButton = ({
   // Extension is installed
   return (
     <Button
-      className="w-1/3 sm:max-w-[145px] h-[145px] flex flex-col gap-2 relative"
+      className="w-1/3 sm:max-w-[145px] h-[145px] flex flex-col gap-2 relative text-colors-font-primary"
       onClick={() => {
         handleConnect(walletId, isInjected);
       }}
