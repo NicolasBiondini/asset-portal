@@ -111,7 +111,7 @@ function Layout({ children }: Props) {
           <Button className="h-[35px] bg-transparent text-card-foreground font-bold hover:scale-[102%] transition-all hover:bg-card hover:text-white w-full flex justify-start text-xs">
             Transfer
           </Button>{" "}
-          <Button className="h-[35px] bg-card text-card-foreground font-bold hover:scale-[102%] transition-all hover:bg-card hover:text-white w-full flex justify-start text-xs">
+          <Button className="h-[35px] bg-transparent text-card-foreground font-bold hover:scale-[102%] transition-all hover:bg-card hover:text-white w-full flex justify-start text-xs">
             Swap
           </Button>
         </div>

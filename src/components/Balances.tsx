@@ -20,7 +20,7 @@ type Props = {};
 
 function Balances({}: Props) {
   const [search, setSearch] = useState("");
-  const { balances } = useWalletState();
+  const { balances, address } = useWalletState();
   const { assetsMetadata: assets } = useAssets();
 
   useBalances();
@@ -92,8 +92,12 @@ function Balances({}: Props) {
                   return numA - numB;
                 })
                 .sort((a, b) => {
-                  const balanceA = Number(balances[a.id]) || 0;
-                  const balanceB = Number(balances[b.id]) || 0;
+                  const balanceA = balances[address]
+                    ? Number(balances[address][a.id])
+                    : 0;
+                  const balanceB = balances[address]
+                    ? Number(balances[address][b.id])
+                    : 0;
                   return balanceB - balanceA; // Sort in descending order based on balance
                 })
                 .map((asset) => {
