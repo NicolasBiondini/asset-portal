@@ -143,7 +143,7 @@ const AssetCard = ({
         </Tooltip>
       </div>
       {address !== "" ? (
-        loaded ? (
+        loaded && !!balances[address] ? (
           <p className="text-white font-bold ">
             {balances[address][id] || "0"}{" "}
             <span className="text-[10px] font-light text-colors-font-primary">

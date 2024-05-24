@@ -1,6 +1,6 @@
 import { AssetMetadata } from "@/types/asset";
 import { Balance } from "@/types/balance";
-import { Wallet } from "@/types/wallets";
+import { Wallet, Web3Key } from "@/types/wallets";
 
 export interface InitialState {
   loaded: boolean;
@@ -18,6 +18,7 @@ export interface UIState extends InitialState {
   setAddress: (address: string) => void;
   setAddressList: (address: string) => void;
   setWalletList: (address: Wallet) => void;
+  removeAddress: (address: string, walletId: Web3Key | undefined) => void;
 }
 
 export const initialState: InitialState = {

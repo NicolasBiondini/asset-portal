@@ -12,9 +12,10 @@ import {
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { Input } from "../ui/input";
-import { FormEvent, MouseEvent, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useWalletState } from "@/data/wallet/storage";
 import ConnectWalletButton from "../ConnectWalletButton";
+import { isValidAddress } from "@/helpers/isValidAddress";
 // const ConnectWalletButton = dynamic(() => import("../ConnectWalletButton"), {
 //   ssr: false,
 // });
@@ -25,11 +26,13 @@ type Props = {
 function AddAddressModal({ children }: Props) {
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const { setAddressList, setLoaded } = useWalletState();
+  const { setAddressList, setLoaded, walletList, addressList } =
+    useWalletState();
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoaded(false);
     setAddressList(inputValue);
+    setInputValue("");
   };
 
   return (
@@ -76,9 +79,19 @@ function AddAddressModal({ children }: Props) {
                   setInputValue(e.target.value);
                 }}
                 placeholder="Address"
+                className="placeholder:font-bold text-white !outline-colors-pink-secondary"
               />
               <DialogClose asChild>
-                <Button type="submit" size={"lg"} className="">
+                <Button
+                  disabled={
+                    !isValidAddress(inputValue) ||
+                    addressList.some((a) => a === inputValue) ||
+                    walletList.some((a) => a.address === inputValue)
+                  }
+                  type="submit"
+                  size={"lg"}
+                  className="font-bold"
+                >
                   Add address
                 </Button>
               </DialogClose>
