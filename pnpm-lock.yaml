@@ -32,6 +32,9 @@ dependencies:
   '@radix-ui/react-tooltip':
     specifier: ^1.0.7
     version: 1.0.7(@types/react-dom@18.3.0)(@types/react@18.2.0)(react-dom@18.3.1)(react@18.2.0)
+  '@substrate/asset-transfer-api':
+    specifier: ^0.2.1
+    version: 0.2.1
   '@tanstack/react-query':
     specifier: ^5.36.2
     version: 5.36.2(react@18.2.0)
@@ -1463,6 +1466,22 @@ packages:
 
   /@scure/base@1.1.6:
     resolution: {integrity: sha512-ok9AWwhcgYuGG3Zfhyqg+zwl+Wn5uE+dwC0NV/2qQkx4dABbb/bx96vWu8NSj+BNjjSjno+JRYRjle1jV08k3g==}
+
+  /@substrate/asset-transfer-api-registry@0.2.18:
+    resolution: {integrity: sha512-KeefxFSwrrLmWYcPGtX21VKsREF/HhjSgKWegpo+d8iY12peXl4WYhh0Yah677II2b34/M9XmBnSNFGm5ndh1w==}
+    dev: false
+
+  /@substrate/asset-transfer-api@0.2.1:
+    resolution: {integrity: sha512-O0rtfW1FjgOHBNo1sBh9pHPek0M4VNGaHGVyDqVaQSv/L9b+uzhA+aUEwkGa6V+hGpNmyE5RnjgioUwduz6RSw==}
+    engines: {node: '>=18.14'}
+    dependencies:
+      '@polkadot/api': 11.0.3
+      '@substrate/asset-transfer-api-registry': 0.2.18
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    dev: false
 
   /@substrate/connect-extension-protocol@2.0.0:
     resolution: {integrity: sha512-nKu8pDrE3LNCEgJjZe1iGXzaD6OSIDD4Xzz/yo4KO9mQ6LBvf49BVrt4qxBFGL6++NneLiWUZGoh+VSd4PyVIg==}

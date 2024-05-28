@@ -10,4 +10,7 @@ export const useConnectionState = create<ConnectionState>()((set) => ({
   setApi: (api) => {
     set((state) => ({ ...state, api }));
   },
+  setChainInfo: (specName, safeXcm) => {
+    set((state) => ({ ...state, specName, safeXcm }));
+  },
 }));

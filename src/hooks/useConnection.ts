@@ -3,14 +3,20 @@ import { useConnectionState } from "@/data/connection/storage";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import {
+  AssetTransferApi,
+  constructApiPromise,
+} from "@substrate/asset-transfer-api";
 
 export const useConnection = () => {
-  const { setApi, api } = useConnectionState();
+  const { setApi, setChainInfo, api } = useConnectionState();
 
   const fetchApiData = async () => {
-    const wsProvider = new WsProvider(RPC_ENDPOINT);
-    const response = await ApiPromise.create({ provider: wsProvider });
-    return response;
+    const { api, specName, safeXcmVersion } = await constructApiPromise(
+      RPC_ENDPOINT
+    );
+
+    return { api, specName, safeXcmVersion };
   };
 
   const { data, isLoading, error } = useQuery({
@@ -22,7 +28,8 @@ export const useConnection = () => {
 
   useEffect(() => {
     if (data !== undefined) {
-      setApi(data);
+      setApi(data.api);
+      setChainInfo(data.specName, data.safeXcmVersion);
     }
-  }, [data, setApi]);
+  }, [data, setApi, setChainInfo]);
 };
