@@ -11,6 +11,8 @@ import { Inter as FontSans, Unbounded } from "next/font/google";
 import { AssetHub } from "./icons/assets";
 import AddressPill from "./AddressPill";
 import SelectAccount from "./modals/SelectAccount";
+import { useConnection } from "@/hooks/useConnection";
+import Link from "next/link";
 type Props = {
   children: JSX.Element | JSX.Element[];
 };
@@ -26,6 +28,9 @@ const fontSans = FontSans({
 });
 
 function Layout({ children }: Props) {
+  // Create assethub blockchain connection
+  useConnection();
+
   const { mode } = useUIState();
   const { address, loaded } = useWalletState();
   return (
@@ -96,21 +101,25 @@ function Layout({ children }: Props) {
       </nav>
       <div className="flex w-full h-full relative">
         <div className="w-[250px] px-6 hidden lg:flex flex-col gap-2 font-unbounded fixed top-20">
-          <Button
-            className={cn(
-              { dark: mode === "dark" },
-              { "dark:!bg-colors-bg-light": true },
-              "h-[35px] bg-transparent text-card-foreground font-bold hover:scale-[102%] transition-all hover:bg-colors-font-seconday dark:hover:bg-card hover:text-white w-full flex justify-start text-xs"
-            )}
-          >
-            Home
-          </Button>
+          <Link href={"/"}>
+            <Button
+              className={cn(
+                { dark: mode === "dark" },
+                { "dark:!bg-colors-bg-light": true },
+                "h-[35px] bg-transparent text-card-foreground font-bold hover:scale-[102%] transition-all hover:bg-colors-font-seconday dark:hover:bg-card hover:text-white w-full flex justify-start text-xs"
+              )}
+            >
+              Home
+            </Button>
+          </Link>
           <Button className="h-[35px] bg-transparent text-card-foreground font-bold hover:scale-[102%] transition-all hover:bg-card hover:text-white w-full flex justify-start text-xs">
             Teleport
           </Button>{" "}
-          <Button className="h-[35px] bg-transparent text-card-foreground font-bold hover:scale-[102%] transition-all hover:bg-card hover:text-white w-full flex justify-start text-xs">
-            Transfer
-          </Button>{" "}
+          <Link href={"/transfer"}>
+            <Button className="h-[35px] bg-transparent text-card-foreground font-bold hover:scale-[102%] transition-all hover:bg-card hover:text-white w-full flex justify-start text-xs">
+              Transfer
+            </Button>{" "}
+          </Link>
           <Button className="h-[35px] bg-transparent text-card-foreground font-bold hover:scale-[102%] transition-all hover:bg-card hover:text-white w-full flex justify-start text-xs">
             Swap
           </Button>
