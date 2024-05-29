@@ -16,7 +16,7 @@ export const transfer = async (
 
     const extrinsic = await assetsApi.createTransferTransaction(
       // 1000 assethub parachain id
-      "1000",
+      "2006",
       // to address
       "",
       // asset
@@ -24,7 +24,7 @@ export const transfer = async (
       // asset amount
       [amount],
       // config, where submittable is to be able to signAndSend
-      { format: "submittable", keepAlive: true }
+      { format: "submittable", keepAlive: false }
     );
 
     const hash = await extrinsic.tx.signAndSend(address, {
