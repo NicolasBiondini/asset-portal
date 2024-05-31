@@ -20,8 +20,7 @@ type Props = {};
 
 function Balances({}: Props) {
   const [search, setSearch] = useState("");
-  const { balances, address } = useWalletState();
-  const { assetsMetadata: assets } = useAssets();
+  const { balances, address, assetsMetadata: assets } = useWalletState();
 
   useBalances();
 

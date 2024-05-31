@@ -13,6 +13,7 @@ import AddressPill from "./AddressPill";
 import SelectAccount from "./modals/SelectAccount";
 import { useConnection } from "@/hooks/useConnection";
 import Link from "next/link";
+import { useAssets } from "@/query/wallet/assets";
 type Props = {
   children: JSX.Element | JSX.Element[];
 };
@@ -30,6 +31,7 @@ const fontSans = FontSans({
 function Layout({ children }: Props) {
   // Create assethub blockchain connection
   useConnection();
+  useAssets();
 
   const { mode } = useUIState();
   const { address, loaded } = useWalletState();

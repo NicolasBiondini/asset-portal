@@ -36,12 +36,12 @@ export const initialState: InitialState = {
   mode: "dark",
   pages: {
     transfer: {
-      tokenId: "",
+      tokenId: "DOT",
       address: "",
       amount: "",
     },
     teleport: {
-      tokenId: "",
+      tokenId: "DOT",
       address: "",
       amount: "",
       parachainId: "",
