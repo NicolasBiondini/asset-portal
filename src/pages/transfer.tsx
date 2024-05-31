@@ -14,18 +14,15 @@ function Transfer({}: Props) {
   const { api, assetApi } = useConnectionState();
   const { address, walletList } = useWalletState();
   const {
-    pages: { transfer: transferPage },
+    pages: {
+      transfer: { amount: tAmount, tokenId, address: toAddress },
+    },
     setTransferAmount,
   } = useUIState();
   const { toast } = useToast();
 
   const getDisabled = () => {
-    if (
-      api === null ||
-      assetApi === null ||
-      transferPage.amount === "" ||
-      transferPage.tokenId === ""
-    )
+    if (api === null || assetApi === null || tAmount === "" || tokenId === "")
       return true;
     return false;
   };
@@ -33,19 +30,20 @@ function Transfer({}: Props) {
   const handleTransfer = async () => {
     if (api === null || assetApi === null) return;
 
-    const amount = convertBigInt(transferPage.amount);
+    const amount = convertBigInt(tAmount);
 
-    const selectedWallet = walletList.filter((w) => w.address === address)[0];
+    const injector = walletList.filter((w) => w.address === address)[0]
+      .injected;
     const res = await transfer({
       assetApi,
       sender: {
-        address: selectedWallet.address,
-        injector: selectedWallet.injected,
+        address,
+        injector,
       },
       txInfo: {
-        tokenId: transferPage.tokenId,
-        amount: amount,
-        address: transferPage.address,
+        tokenId,
+        amount,
+        address: toAddress,
       },
     });
 

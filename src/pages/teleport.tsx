@@ -14,28 +14,30 @@ function Teleport({}: Props) {
   const { api, assetApi } = useConnectionState();
   const { address, walletList } = useWalletState();
   const {
-    pages: { teleport },
+    pages: {
+      teleport: { tokenId, parachainId, amount: tAmount, address: toAddress },
+    },
   } = useUIState();
   const { toast } = useToast();
 
   const handleTransfer = async () => {
     if (api === null || assetApi === null) return;
-    const toAddress = parseAddress(teleport.address, 5);
-    const amount = convertBigInt(teleport.amount);
+    const amount = convertBigInt(tAmount);
 
-    const selectedWallet = walletList.filter((w) => w.address === address)[0];
+    const injector = walletList.filter((w) => w.address === address)[0]
+      .injected;
     const res = await transfer({
       assetApi,
       sender: {
-        address: selectedWallet.address,
-        injector: selectedWallet.injected,
+        address,
+        injector,
       },
       txInfo: {
-        amount: amount,
-        tokenId: teleport.tokenId,
-        address: toAddress,
+        amount,
+        tokenId,
+        address: parseAddress(toAddress, 5),
       },
-      parachainId: teleport.parachainId,
+      parachainId,
     });
     if (res.status === "error")
       return toast({
