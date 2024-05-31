@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useConnectionState } from "@/data/connection/storage";
+import { useUIState } from "@/data/ui/storage";
 import { useWalletState } from "@/data/wallet/storage";
+import { convertBigInt } from "@/helpers/convertBigInt";
 import { parseAddress } from "@/helpers/parseAddress";
 import { transfer } from "@/methods";
 import React from "react";
@@ -9,25 +11,32 @@ import React from "react";
 type Props = {};
 
 function Teleport({}: Props) {
-  const { api, specName, safeXcm } = useConnectionState();
+  const { api, assetApi } = useConnectionState();
   const { address, walletList } = useWalletState();
+  const {
+    pages: { teleport },
+  } = useUIState();
   const { toast } = useToast();
 
   const handleTransfer = async () => {
-    if (api === null) return;
-    const toAddress = parseAddress(address, 5);
-    const planckFactor = Math.pow(10, 10);
-    const amount = Number("0.01") * planckFactor;
-    console.log(amount.toString());
+    if (api === null || assetApi === null) return;
+    const toAddress = parseAddress(teleport.address, 5);
+    const amount = convertBigInt(teleport.amount);
+
     const selectedWallet = walletList.filter((w) => w.address === address)[0];
-    const res = await transfer(
-      api,
-      specName,
-      safeXcm,
-      selectedWallet.address,
-      selectedWallet.injected,
-      amount.toString()
-    );
+    const res = await transfer({
+      assetApi,
+      sender: {
+        address: selectedWallet.address,
+        injector: selectedWallet.injected,
+      },
+      txInfo: {
+        amount: amount,
+        tokenId: teleport.tokenId,
+        address: toAddress,
+      },
+      parachainId: teleport.parachainId,
+    });
     if (res.status === "error")
       return toast({
         title: "Error sending.",

@@ -1,31 +1,54 @@
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { useConnectionState } from "@/data/connection/storage";
+import { useUIState } from "@/data/ui/storage";
 import { useWalletState } from "@/data/wallet/storage";
+import { convertBigInt } from "@/helpers/convertBigInt";
 import { transfer } from "@/methods";
 import React from "react";
 
 type Props = {};
 
 function Transfer({}: Props) {
-  const { api, specName, safeXcm } = useConnectionState();
+  const { api, assetApi } = useConnectionState();
   const { address, walletList } = useWalletState();
+  const {
+    pages: { transfer: transferPage },
+    setTransferAmount,
+  } = useUIState();
   const { toast } = useToast();
 
+  const getDisabled = () => {
+    if (
+      api === null ||
+      assetApi === null ||
+      transferPage.amount === "" ||
+      transferPage.tokenId === ""
+    )
+      return true;
+    return false;
+  };
+
   const handleTransfer = async () => {
-    if (api === null) return;
-    const planckFactor = Math.pow(10, 10);
-    const amount = Number("0.11") * planckFactor;
-    console.log(amount.toString());
+    if (api === null || assetApi === null) return;
+
+    const amount = convertBigInt(transferPage.amount);
+
     const selectedWallet = walletList.filter((w) => w.address === address)[0];
-    const res = await transfer(
-      api,
-      specName,
-      safeXcm,
-      selectedWallet.address,
-      selectedWallet.injected,
-      amount.toString()
-    );
+    const res = await transfer({
+      assetApi,
+      sender: {
+        address: selectedWallet.address,
+        injector: selectedWallet.injected,
+      },
+      txInfo: {
+        tokenId: transferPage.tokenId,
+        amount: amount,
+        address: transferPage.address,
+      },
+    });
+
     if (res.status === "error")
       return toast({
         title: "Error sending.",
@@ -40,17 +63,6 @@ function Transfer({}: Props) {
 
   return (
     <section className="flex flex-col gap-8 w-full ">
-      {/* <Button
-      onClick={() => {
-        if (mode === "dark") {
-          setMode("light");
-        } else {
-          setMode("dark");
-        }
-      }}
-    >
-      Click change mode
-    </Button> */}
       <div className="flex flex-col gap-8 w-full max-w-[1024px] mx-auto">
         <div className="flex flex-col">
           <h1 className="text-colors-pink-dot text-xl font-bold font-unbounded">
@@ -63,6 +75,23 @@ function Transfer({}: Props) {
             Please remember to always carefully check the assetId. AssetHub is
             permissionless, allowing anyone to create a new asset.
           </p>
+        </div>
+        <div className="flex flex-col w-full h-full items-center ">
+          <form
+            onSubmit={handleTransfer}
+            className="flex flex-col w-full max-w-[400px] bg-colors-bg-secondary h-[400px] rounded-lg px-4 py-4"
+          >
+            <Input
+              value={transferPage.amount}
+              onChange={(e) => {
+                setTransferAmount(e.target.value);
+              }}
+              type="number"
+            />
+            <Button disabled={getDisabled()} type="submit">
+              Transfer
+            </Button>
+          </form>
         </div>
         <div className="flex">
           {api === null ? (

@@ -9,14 +9,17 @@ import {
 } from "@substrate/asset-transfer-api";
 
 export const useConnection = () => {
-  const { setApi, setChainInfo, api } = useConnectionState();
+  const { setApi, setAssetApi, api } = useConnectionState();
 
   const fetchApiData = async () => {
+    // Get connection
     const { api, specName, safeXcmVersion } = await constructApiPromise(
       RPC_ENDPOINT
     );
+    // Create a new asset api to call transfer methods
+    const assetsApi = new AssetTransferApi(api, specName, safeXcmVersion);
 
-    return { api, specName, safeXcmVersion };
+    return { api, assetsApi };
   };
 
   const { data, isLoading, error } = useQuery({
@@ -29,7 +32,7 @@ export const useConnection = () => {
   useEffect(() => {
     if (data !== undefined) {
       setApi(data.api);
-      setChainInfo(data.specName, data.safeXcmVersion);
+      setAssetApi(data.assetsApi);
     }
-  }, [data, setApi, setChainInfo]);
+  }, [data, setApi, setAssetApi]);
 };

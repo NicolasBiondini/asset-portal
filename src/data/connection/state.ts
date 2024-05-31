@@ -1,18 +1,17 @@
 import { ApiPromise } from "@polkadot/api";
+import { AssetTransferApi } from "@substrate/asset-transfer-api";
 
 export interface InitialState {
   api: ApiPromise | null;
-  specName: string;
-  safeXcm: number;
+  assetApi: AssetTransferApi | null;
 }
 
 export interface ConnectionState extends InitialState {
   setApi: (api: ApiPromise) => void;
-  setChainInfo: (specName: string, safeXcm: number) => void;
+  setAssetApi: (assetApi: AssetTransferApi) => void;
 }
 
 export const initialState: InitialState = {
   api: null,
-  specName: "",
-  safeXcm: 0,
+  assetApi: null,
 };

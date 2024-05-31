@@ -1,34 +1,33 @@
-import { web3FromSource } from "@polkadot/extension-dapp";
-import { ApiPromise } from "@polkadot/api";
 import { AssetTransferApi } from "@substrate/asset-transfer-api";
-import { InjectedExtension } from "@polkadot/extension-inject/types";
+import { Sender, TxInfo } from "@/types/transfer";
 
-export const transfer = async (
-  api: ApiPromise,
-  specName: string,
-  safeXcm: number,
-  address: string,
-  injector: InjectedExtension,
-  amount: string
-): Promise<{ status: "ok" | "error"; hash: string }> => {
+export const transfer = async ({
+  assetApi,
+  sender,
+  txInfo,
+  parachainId = "1000",
+}: {
+  assetApi: AssetTransferApi;
+  sender: Sender;
+  txInfo: TxInfo;
+  parachainId?: string;
+}): Promise<{ status: "ok" | "error"; hash: string }> => {
   try {
-    const assetsApi = new AssetTransferApi(api, specName, safeXcm);
-
-    const extrinsic = await assetsApi.createTransferTransaction(
+    const extrinsic = await assetApi.createTransferTransaction(
       // 1000 assethub parachain id
-      "2006",
+      parachainId,
       // to address
-      "",
+      txInfo.address,
       // asset
-      ["DOT"],
+      [txInfo.tokenId],
       // asset amount
-      [amount],
+      [txInfo.amount],
       // config, where submittable is to be able to signAndSend
       { format: "submittable", keepAlive: false }
     );
 
-    const hash = await extrinsic.tx.signAndSend(address, {
-      signer: injector.signer,
+    const hash = await extrinsic.tx.signAndSend(sender.address, {
+      signer: sender.injector.signer,
     });
 
     console.log(hash, "response", "hash :  ", hash.toString());
