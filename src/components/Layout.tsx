@@ -15,6 +15,7 @@ import { useConnection } from "@/hooks/useConnection";
 import Link from "next/link";
 import { useAssets } from "@/query/wallet/assets";
 import { useBalances } from "@/query/wallet/balances";
+import Menu from "./Menu";
 type Props = {
   children: JSX.Element | JSX.Element[];
 };
@@ -107,28 +108,7 @@ function Layout({ children }: Props) {
       </nav>
       <div className="flex flex-grow relative">
         <div className="w-[250px] px-6 hidden lg:flex flex-col gap-2  font-unbounded fixed top-20">
-          <Link href={"/"}>
-            <Button
-              className={cn(
-                { dark: mode === "dark" },
-                { "dark:!bg-colors-bg-light": true },
-                "h-[35px] bg-transparent text-card-foreground font-bold hover:scale-[102%] transition-all hover:bg-colors-font-seconday dark:hover:bg-card hover:text-white w-full flex justify-start text-xs"
-              )}
-            >
-              Home
-            </Button>
-          </Link>
-          <Button className="h-[35px] bg-transparent text-card-foreground font-bold hover:scale-[102%] transition-all hover:bg-card hover:text-white w-full flex justify-start text-xs">
-            Teleport
-          </Button>{" "}
-          <Link href={"/transfer"}>
-            <Button className="h-[35px] bg-transparent text-card-foreground font-bold hover:scale-[102%] transition-all hover:bg-card hover:text-white w-full flex justify-start text-xs">
-              Transfer
-            </Button>{" "}
-          </Link>
-          <Button className="h-[35px] bg-transparent text-card-foreground font-bold hover:scale-[102%] transition-all hover:bg-card hover:text-white w-full flex justify-start text-xs">
-            Swap
-          </Button>
+          <Menu />
         </div>
         <div className="flex-grow w-full flex flex-col justify-center lg:ml-[200px] xl:ml-[250px]  ">
           {children}
