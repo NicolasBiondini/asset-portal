@@ -1,3 +1,4 @@
+import WIP from "@/components/WIP";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useConnectionState } from "@/data/connection/storage";
@@ -6,6 +7,7 @@ import { useWalletState } from "@/data/wallet/storage";
 import { convertBigInt } from "@/helpers/convertBigInt";
 import { parseAddress } from "@/helpers/parseAddress";
 import { transfer } from "@/methods";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React from "react";
 
 type Props = {};
@@ -52,7 +54,7 @@ function Teleport({}: Props) {
   };
 
   return (
-    <section className="flex flex-col gap-8 w-full h-full px-8 lg:px-24 lg:py-14">
+    <section className="flex flex-col gap-8 w-full h-full px-8 lg:px-24 lg:py-14 ">
       <div className="flex flex-col gap-8 w-full max-w-[1024px] h-full mx-auto justify-center items-start">
         <div className="flex flex-col">
           <h1 className="text-colors-pink-dot text-xl font-bold font-unbounded">
@@ -68,18 +70,70 @@ function Teleport({}: Props) {
             }
           </p>
         </div>
-        <div className="flex flex-col w-full h-[80%] items-center justify-start mt-auto  ">
-          <div className="flex">
-            {api === null ? (
-              <h1>loading ...</h1>
-            ) : (
-              <Button onClick={handleTransfer}>Teleport 0.1 DOT</Button>
-            )}
-          </div>{" "}
-        </div>
+        <Tabs
+          defaultValue="from"
+          className=" flex flex-col w-full h-full justify-start gap-2 relative "
+        >
+          <TabsList className="w-full h-auto">
+            <TabsTrigger
+              value="from"
+              className="w-full text-xs md:text-base data-[state=active]:text-white"
+            >
+              Send from AssetHub
+            </TabsTrigger>
+            <TabsTrigger
+              value="to"
+              className="w-full text-xs md:text-base data-[state=active]:text-white"
+            >
+              Receive on AssetHub
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent
+            className="w-full h-full justify-center items-center"
+            value="from"
+          >
+            <div className="flex flex-col w-full h-full justify-center items-center  ">
+              {api === null ? (
+                <TeleportSkeleton />
+              ) : (
+                <Button onClick={handleTransfer}>Teleport 0.1 DOT</Button>
+              )}
+            </div>{" "}
+          </TabsContent>
+          <TabsContent
+            className="w-full h-full justify-center items-center"
+            value="to"
+          >
+            <div className="flex justify-center w-full h-full items-center">
+              {api === null ? (
+                <TeleportSkeleton />
+              ) : (
+                <WIP number={1} size="sm" />
+              )}
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </section>
   );
 }
 
 export default Teleport;
+
+// Loader
+const TeleportSkeleton = () => {
+  return (
+    <div className="animate-pulse flex flex-col w-full max-w-[400px]  gap-2">
+      <div className="flex flex-col gap-1">
+        {" "}
+        <div className="bg-colors-bg-secondary  rounded-md h-[182px] rounded-b-none"></div>
+        <div className="h-[60px] bg-colors-bg-secondary rounded-md rounded-t-none"></div>
+      </div>
+      <div className="flex gap-1 w-full h-[52px]">
+        <div className="h-full w-full bg-colors-bg-secondary rounded-md "></div>
+        <div className="h-full w-full bg-colors-bg-secondary rounded-md "></div>
+      </div>
+      <div className="h-[48px] bg-colors-bg-secondary rounded-md "></div>
+    </div>
+  );
+};

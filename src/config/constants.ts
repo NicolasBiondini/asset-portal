@@ -37,3 +37,13 @@ export const WIP_IMAGES = [
   "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWVyeGs1cXNiZnd4NmNsNmVnNGc2dmdyNWdoenJmZ3NhdDR3eG5ucyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/lzz3B3xLZluuY/giphy.webp",
   "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDcwM3FoeWw5c21nNXg4bnhzbmtxOWJjMm1xYm9rdHdjdDJoMGx6eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/wpoLqr5FT1sY0/giphy.webp",
 ];
+
+export const WIP_WORDS = [
+  "stunning",
+  "impressive",
+  "amazing",
+  "remarkable",
+  "spectacular",
+  "breathtaking",
+  "awe-inspiring",
+];

@@ -109,7 +109,7 @@ function Layout({ children }: Props) {
         <div className="w-[250px] px-6 hidden lg:flex flex-col gap-2  font-unbounded fixed top-20">
           <Menu />
         </div>
-        <div className="flex-grow w-full flex flex-col justify-center lg:ml-[200px] xl:ml-[250px]  ">
+        <div className="flex-grow w-full flex flex-col justify-center lg:ml-[200px] xl:ml-[250px] pb-10 ">
           {children}
         </div>
       </div>
