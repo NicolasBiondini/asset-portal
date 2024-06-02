@@ -1,5 +1,5 @@
-import Balances from "@/components/Balances";
+import BalancesPanel from "@/components/pages/balances/BalancesPanel";
 
 export default function Home() {
-  return <Balances />;
+  return <BalancesPanel />;
 }

@@ -1,24 +1,13 @@
 import { useWalletState } from "@/data/wallet/storage";
-import { useAssets } from "@/query/wallet/assets";
-import { useBalances } from "@/query/wallet/balances";
-import { AssetMetadata } from "@/types/asset";
-import { ApiPromise, WsProvider } from "@polkadot/api";
-import { useEffect, useState } from "react";
-import { Button } from "./ui/button";
-import NavModal from "./NavModal";
-import { useUIState } from "@/data/ui/storage";
-import AssetHub from "./icons/assets/AssetHub";
-import { Badge } from "@/components/ui/badge";
-import Tooltip from "./Tooltip";
-import { DotIcon, SearchIcon } from "lucide-react";
-import DedIcon from "./icons/assets/DedIcon";
-import { getAssetIcon } from "@/config/icons.config";
-import { Input } from "./ui/input";
-import { parseAddress } from "@/helpers/parseAddress";
+import { useState } from "react";
+import { SearchIcon } from "lucide-react";
+import { Input } from "../../ui/input";
+import Skeleton from "./Skeleton";
+import AssetCard from "./AssetCard";
 
 type Props = {};
 
-function Balances({}: Props) {
+function BalancesPanel({}: Props) {
   const [search, setSearch] = useState("");
   const { balances, address, assetsMetadata: assets } = useWalletState();
 
@@ -56,7 +45,7 @@ function Balances({}: Props) {
           </div>
           <div className="flex flex-col gap-4 w-full">
             {assets.length === 0 ? (
-              <AssetSkeleton />
+              <Skeleton />
             ) : (
               assets
                 .filter(
@@ -105,70 +94,4 @@ function Balances({}: Props) {
   );
 }
 
-export default Balances;
-
-// Asset card component
-const AssetCard = ({
-  id,
-  symbol,
-  name,
-}: {
-  id: string;
-  symbol: string;
-  name: string;
-  decimals: string;
-}) => {
-  const { loaded, balances, address } = useWalletState();
-  const AssetIcon = getAssetIcon(id);
-
-  return (
-    <div className="w-full gap-2  flex items-center justify-between px-4 py-2 border rounded-lg border-colors-pink-secondary">
-      <div className="flex gap-2  items-center">
-        <AssetIcon className="w-7 h-7" />
-        <p className="font-bold text-white ">{symbol}</p>
-        <Tooltip message={name}>
-          <Badge variant="default" className="h-5 !text-xs">
-            {id === "DOT" ? "Native" : `#${id}`}
-          </Badge>
-        </Tooltip>
-      </div>
-      {address !== "" ? (
-        loaded && !!balances[address] ? (
-          <p className="text-white font-bold ">
-            {balances[address][id] || "0"}{" "}
-            <span className="text-[10px] font-light text-colors-font-primary">
-              {symbol}
-            </span>
-          </p>
-        ) : (
-          <div className="animate-pulse">
-            <div className="h-6 bg-colors-grey-line rounded-md w-[70px]"></div>
-          </div>
-        )
-      ) : (
-        <p className="text-white font-bold">
-          0{" "}
-          <span className="text-[10px] font-light text-colors-font-primary">
-            {symbol}
-          </span>
-        </p>
-      )}
-    </div>
-  );
-};
-
-// Loader
-const AssetSkeleton = () => {
-  return (
-    <div className="animate-pulse space-y-4 gap-2">
-      {Array.from({ length: 10 }, (_, index) => index + 1).map((item) => {
-        return (
-          <div
-            key={`${item}-skeleton`}
-            className="h-11 bg-colors-grey-line rounded-lg w-full px-4 py-2"
-          ></div>
-        );
-      })}
-    </div>
-  );
-};
+export default BalancesPanel;
