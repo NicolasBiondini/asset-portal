@@ -97,11 +97,11 @@ function Transfer({}: Props) {
             Transfer
           </h1>
           <p className="text-xs">
-            Here you can check your balances on AssetHub.
+            Here you can send different assets within AssetHub.
           </p>
           <p className="text-xs">
-            Please remember to always carefully check the assetId. AssetHub is
-            permissionless, allowing anyone to create a new asset.
+            Please ensure to verify the assetId before transferring. AssetHub is
+            permissionless, allowing anyone to create new assets.
           </p>
         </div>
         <div className="flex flex-col w-full h-[80%] items-center justify-start mt-auto  ">

@@ -12,7 +12,6 @@ import { AssetHub } from "./icons/assets";
 import AddressPill from "./AddressPill";
 import SelectAccount from "./modals/SelectAccount";
 import { useConnection } from "@/hooks/useConnection";
-import Link from "next/link";
 import { useAssets } from "@/query/wallet/assets";
 import { useBalances } from "@/query/wallet/balances";
 import Menu from "./Menu";
@@ -39,7 +38,7 @@ function Layout({ children }: Props) {
   useBalances();
 
   const { mode } = useUIState();
-  const { address, loaded } = useWalletState();
+  const { address } = useWalletState();
   return (
     <main
       className={cn(
