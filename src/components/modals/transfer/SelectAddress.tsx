@@ -61,47 +61,18 @@ function SelectAddress({ children }: Props) {
           </DialogDescription>
         </DialogHeader>
         <Tabs
-          defaultValue="extensions"
+          defaultValue="read-only"
           className="w-full h-[200px] flex flex-col justify-center relative"
         >
           <TabsList className="w-full absolute top-2">
-            <TabsTrigger value="extensions" className="w-full">
-              Extensions
-            </TabsTrigger>
             <TabsTrigger value="read-only" className="w-full">
               Read only
             </TabsTrigger>
+            <TabsTrigger value="extensions" className="w-full">
+              Extensions
+            </TabsTrigger>
           </TabsList>
-          <TabsContent
-            value="extensions"
-            className="absolute top-14 w-full left-0 "
-          >
-            <div className="flex flex-col gap-2">
-              {addressList.map((address) => {
-                return (
-                  <AccountButton
-                    key={address}
-                    address={address}
-                    handleClick={handleClick}
-                    disabled={address === activeAddress}
-                    selected={address === toAddress}
-                  />
-                );
-              })}
-              {walletList.map((wallet) => {
-                return (
-                  <AccountButton
-                    key={wallet.address}
-                    address={wallet.address}
-                    walletId={wallet.walletId}
-                    handleClick={handleClick}
-                    disabled={wallet.address === activeAddress}
-                    selected={wallet.address === toAddress}
-                  />
-                );
-              })}
-            </div>{" "}
-          </TabsContent>
+
           <TabsContent
             className="absolute top-20 w-full left-0 "
             value="read-only"
@@ -133,6 +104,36 @@ function SelectAddress({ children }: Props) {
                 </Button>
               </DialogClose>
             </form>
+          </TabsContent>
+          <TabsContent
+            value="extensions"
+            className="absolute top-14 w-full left-0 "
+          >
+            <div className="flex flex-col gap-2">
+              {addressList.map((address) => {
+                return (
+                  <AccountButton
+                    key={address}
+                    address={address}
+                    handleClick={handleClick}
+                    disabled={address === activeAddress}
+                    selected={address === toAddress}
+                  />
+                );
+              })}
+              {walletList.map((wallet) => {
+                return (
+                  <AccountButton
+                    key={wallet.address}
+                    address={wallet.address}
+                    walletId={wallet.walletId}
+                    handleClick={handleClick}
+                    disabled={wallet.address === activeAddress}
+                    selected={wallet.address === toAddress}
+                  />
+                );
+              })}
+            </div>{" "}
           </TabsContent>
         </Tabs>
       </DialogContent>

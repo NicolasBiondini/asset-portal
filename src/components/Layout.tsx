@@ -14,6 +14,7 @@ import SelectAccount from "./modals/SelectAccount";
 import { useConnection } from "@/hooks/useConnection";
 import Link from "next/link";
 import { useAssets } from "@/query/wallet/assets";
+import { useBalances } from "@/query/wallet/balances";
 type Props = {
   children: JSX.Element | JSX.Element[];
 };
@@ -31,20 +32,23 @@ const fontSans = FontSans({
 function Layout({ children }: Props) {
   // Create assethub blockchain connection
   useConnection();
+  // Fetch assets
   useAssets();
+  // Fetch user balances
+  useBalances();
 
   const { mode } = useUIState();
   const { address, loaded } = useWalletState();
   return (
     <main
       className={cn(
-        "min-h-screen flex flex-col gap-1 bg-background antialiased  text-foreground",
+        "min-h-screen h-full flex flex-col gap-1 bg-background antialiased  text-foreground",
         fontSans.variable,
         unbounded.variable,
         { dark: mode === "dark" }
       )}
     >
-      <nav className="flex justify-between px-5 items-center h-[120px] md:h-[70px] sticky top-0 left-0 w-full !bg-background z-10">
+      <nav className="flex justify-between px-5 items-center h-[120px]  md:h-[70px] sticky top-0 left-0 w-full !bg-background z-10">
         <NavModal />
         <div className="hidden lg:flex font-unbounded items-center gap-2">
           <AssetHub className="w-8 h-8" />
@@ -101,8 +105,8 @@ function Layout({ children }: Props) {
           )}
         </div>
       </nav>
-      <div className="flex w-full h-full relative">
-        <div className="w-[250px] px-6 hidden lg:flex flex-col gap-2 font-unbounded fixed top-20">
+      <div className="flex flex-grow relative">
+        <div className="w-[250px] px-6 hidden lg:flex flex-col gap-2  font-unbounded fixed top-20">
           <Link href={"/"}>
             <Button
               className={cn(
@@ -126,7 +130,7 @@ function Layout({ children }: Props) {
             Swap
           </Button>
         </div>
-        <div className="w-full flex flex-col justify-center lg:ml-[200px] xl:ml-[250px]  ">
+        <div className="flex-grow w-full flex flex-col justify-center lg:ml-[200px] xl:ml-[250px]  ">
           {children}
         </div>
       </div>

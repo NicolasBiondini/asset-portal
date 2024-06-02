@@ -1,3 +1,4 @@
+import AddAddressModal from "@/components/modals/AddAddressModal";
 import SelectAsset from "@/components/modals/SelectAsset";
 import SelectAddress from "@/components/modals/transfer/SelectAddress";
 import { Button } from "@/components/ui/button";
@@ -12,14 +13,19 @@ import { convertBigInt } from "@/helpers/convertBigInt";
 import { shortenAddress } from "@/helpers/shortenAddress";
 import { cn } from "@/lib/utils";
 import { transfer } from "@/methods";
-import { ArrowBigRightIcon, ChevronDown } from "lucide-react";
+import { ArrowBigRightIcon, ChevronDown, Wallet } from "lucide-react";
 import React from "react";
 
 type Props = {};
 
 function Transfer({}: Props) {
   const { api, assetApi } = useConnectionState();
-  const { address, walletList, assetsMetadata: assets } = useWalletState();
+  const {
+    address,
+    walletList,
+    assetsMetadata: assets,
+    balances,
+  } = useWalletState();
   const {
     pages: {
       transfer: { amount: tAmount, tokenId, address: toAddress },
@@ -38,7 +44,15 @@ function Transfer({}: Props) {
   const getDisabled = () => {
     if (api === null || assetApi === null || tAmount === "" || tokenId === "")
       return true;
-    return false;
+    if (balances[address]) {
+      if (
+        Number(tAmount) >= Number(balances[address][tokenId]) ||
+        Number(tAmount) <= 0
+      )
+        return true;
+      return false;
+    }
+    return true;
   };
 
   const handleTransfer = async () => {
@@ -46,8 +60,10 @@ function Transfer({}: Props) {
 
     const amount = convertBigInt(tAmount);
 
-    const injector = walletList.filter((w) => w.address === address)[0]
-      .injected;
+    const injector =
+      walletList.length > 0 &&
+      walletList.filter((w) => w.address === address)[0].injected;
+    if (!injector) return;
     const res = await transfer({
       assetApi,
       sender: {
@@ -74,8 +90,8 @@ function Transfer({}: Props) {
   };
 
   return (
-    <section className="flex flex-col gap-8 w-full ">
-      <div className="flex flex-col gap-8 w-full max-w-[1024px] mx-auto">
+    <section className="flex flex-col gap-8 w-full h-full px-8 lg:px-24 lg:py-14">
+      <div className="flex flex-col gap-8 w-full max-w-[1024px] h-full mx-auto justify-center items-start">
         <div className="flex flex-col">
           <h1 className="text-colors-pink-dot text-xl font-bold font-unbounded">
             Transfer
@@ -88,18 +104,13 @@ function Transfer({}: Props) {
             permissionless, allowing anyone to create a new asset.
           </p>
         </div>
-        <div className="flex flex-col w-full h-full items-center ">
+        <div className="flex flex-col w-full h-[80%] items-center justify-start mt-auto  ">
           {assets.length === 0 || api === null ? (
-            <h1>loading...</h1>
+            <TransferSkeleton />
           ) : (
-            <form
-              onSubmit={handleTransfer}
-              className="flex flex-col w-full max-w-[400px] gap-2 "
-            >
+            <form className="flex flex-col w-full max-w-[400px] gap-2 ">
               <div
-                className={cn(
-                  "flex flex-col gap-1 rounded-md w-full border-2 border-transparent"
-                )}
+                className={cn("flex flex-col gap-1 rounded-md w-full relative")}
               >
                 <div className="bg-colors-bg-secondary rounded-t-md justify-center ">
                   <p className="text-xs font-bold pt-4 pl-4">
@@ -107,7 +118,7 @@ function Transfer({}: Props) {
                   </p>
                   <Input
                     className={cn(
-                      "h-[150px] focus-visible:ring-transparent bg-transparent outline-none border-none  text-4xl md:text-6xl font-bold text-center placeholder:text-center text-white caret-colors-pink-dot",
+                      "h-[150px] pb-6 focus-visible:ring-transparent bg-transparent outline-none border-none  text-4xl md:text-6xl font-bold text-center placeholder:text-center text-white caret-colors-pink-dot",
                       {
                         "text-center pr-[50px] placeholder:mr-[-35px]":
                           tAmount === "",
@@ -120,6 +131,17 @@ function Transfer({}: Props) {
                     }}
                     type="number"
                   />
+                  {balances[address] && balances[address][tokenId] && (
+                    <div className="flex absolute bottom-20 right-5 gap-1 items-center">
+                      <Wallet className="w-4 h-4 mb-[1px] text-colors-pink-dot" />
+                      <p className="text-sm font-bold text-white">
+                        {balances[address][tokenId]}{" "}
+                      </p>
+                      <p className="text-[10px] font-bold self-end mb-[1px]">
+                        {assetInfo && assetInfo.info.symbol}
+                      </p>
+                    </div>
+                  )}
                 </div>
                 <SelectAsset>
                   <Button className="bg-colors-bg-secondary hover:bg-colors-bg-secondary !h-[60px]  rounded-t-none hover:opacity-70 font-bold justify-between">
@@ -135,7 +157,7 @@ function Transfer({}: Props) {
               </div>
 
               <SelectAddress>
-                <Button className="flex items-center bg-colors-bg-secondary hover:bg-colors-bg-secondary justify-start py-8  hover:opacity-70 font-bold ">
+                <Button className="flex items-center bg-colors-bg-secondary hover:bg-colors-bg-secondary justify-start pt-7 pb-6  hover:opacity-70 font-bold ">
                   {toAddress === "" ? (
                     <p className="text-center w-full">
                       Select destination address
@@ -148,37 +170,73 @@ function Transfer({}: Props) {
                           className="flex gap-1 h-full relative justify-center items-center"
                           key={`wallet-${wallet.address}-button-selected`}
                         >
-                          <p className="absolute text-xs text-colors-font-seconday -top-6 left-0">
+                          <p className="absolute text-xs text-colors-font-seconday -top-5 left-0">
                             To:{" "}
                           </p>
-                          <Icon className="w-5 h-5 mt-3 ml-8" />{" "}
-                          <p className="mt-3 text-colors-font-primary">
+                          <Icon className="w-5 h-5 mt-2 ml-6" />{" "}
+                          <p className="mt-3 text-white">
                             {shortenAddress(toAddress, 16)}
                           </p>
                         </div>
                       );
                     })
                   ) : (
-                    <p>{shortenAddress(toAddress, 10)}</p>
+                    <div
+                      className="flex gap-1 h-full relative justify-center items-center"
+                      key={`toAddress-${toAddress}-button-selected`}
+                    >
+                      <p className="absolute text-xs text-colors-font-seconday -top-5 left-0">
+                        To:{" "}
+                      </p>
+                      <Wallet className="w-5 h-5 mt-2 ml-6  text-colors-pink-dot" />
+
+                      <p className="mt-3  text-white">
+                        {shortenAddress(toAddress, 16)}
+                      </p>
+                    </div>
                   )}
                 </Button>
               </SelectAddress>
-              <Button disabled={getDisabled()} type="submit">
-                Transfer
-              </Button>
+              {walletList.filter((wallet) => wallet.address === address)
+                .length > 0 ? (
+                <Button
+                  onClick={handleTransfer}
+                  className="py-6 font-bold"
+                  disabled={getDisabled()}
+                  type="button"
+                >
+                  Transfer
+                </Button>
+              ) : (
+                <AddAddressModal>
+                  <Button className="py-6 font-bold flex gap-1 items-center">
+                    <Wallet className="w-4 h-4 " />
+
+                    <p>Connect wallet</p>
+                  </Button>
+                </AddAddressModal>
+              )}
             </form>
           )}
         </div>
-        {/* <div className="flex">
-          {api === null ? (
-            <h1>loading ...</h1>
-          ) : (
-            <Button onClick={handleTransfer}>Transfer 0.1 DOT</Button>
-          )}
-        </div> */}
       </div>
     </section>
   );
 }
 
 export default Transfer;
+
+// Loader
+const TransferSkeleton = () => {
+  return (
+    <div className="animate-pulse flex flex-col w-full max-w-[400px]  gap-2">
+      <div className="flex flex-col gap-1">
+        {" "}
+        <div className="bg-colors-bg-secondary  rounded-md h-[182px] rounded-b-none"></div>
+        <div className="h-[60px] bg-colors-bg-secondary rounded-md rounded-t-none"></div>
+      </div>
+      <div className="h-[52px] bg-colors-bg-secondary rounded-md "></div>
+      <div className="h-[48px] bg-colors-bg-secondary rounded-md "></div>
+    </div>
+  );
+};

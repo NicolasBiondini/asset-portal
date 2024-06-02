@@ -22,10 +22,8 @@ function Balances({}: Props) {
   const [search, setSearch] = useState("");
   const { balances, address, assetsMetadata: assets } = useWalletState();
 
-  useBalances();
-
   return (
-    <section className="flex flex-col gap-8 w-full ">
+    <section className="flex flex-col gap-8 w-full px-8 lg:px-24 lg:py-14">
       {/* <Button
         onClick={() => {
           if (mode === "dark") {
