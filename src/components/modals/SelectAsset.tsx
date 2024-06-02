@@ -114,20 +114,30 @@ function SelectAsset({ children }: Props) {
                         selectAsset(asset.id);
                       }}
                       variant={"ghost"}
-                      className="text-white w-full flex py-6 justify-start"
+                      className="text-white w-full flex py-6 justify-between"
                       key={`showasset-modal-selectasset-${asset.id}`}
                     >
                       <div className="flex gap-2 justify-center items-center">
-                        <AssetIcon className="w-10 h-10" />
+                        <AssetIcon className="w-8 h-8" />
                         <div className="flex flex-col gap-0 items-start">
-                          <p className="!p-0 !m-0 text-[12px] font-bold !-mb-[6px]">
+                          <p className="!p-0 !m-0 text-[12px] font-bold !-mb-[7px]">
                             {asset.info.symbol}
                           </p>
-                          <p className="text-[8px] text-colors-font-seconday ">
+                          <p className="text-[8px] -mb-1 text-colors-font-seconday ">
                             {asset.info.symbol}
                           </p>
                         </div>
                       </div>
+                      {balances[address] && (
+                        <div className="flex gap-1">
+                          <p className=" text-white text-xs">
+                            {balances[address][asset.id]}
+                          </p>
+                          <p className=" text-colors-font-seconday text-[8px]">
+                            {asset.info.symbol}
+                          </p>
+                        </div>
+                      )}
                     </Button>
                   );
                 })}
