@@ -1,6 +1,6 @@
 function Skeleton() {
   return (
-    <div className="animate-pulse flex flex-col w-full max-w-[400px]  gap-2">
+    <div className="animate-pulse flex flex-col w-full max-w-[400px]  gap-4">
       <div className="flex flex-col gap-1">
         {" "}
         <div className="bg-colors-bg-secondary  rounded-md h-[182px] rounded-b-none"></div>

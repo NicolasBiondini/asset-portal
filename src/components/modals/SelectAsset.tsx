@@ -25,9 +25,10 @@ import { getAssetIcon } from "@/config/icons.config";
 
 type Props = {
   children: JSX.Element | JSX.Element[];
+  filterAssets?: string[];
 };
 
-function SelectAsset({ children }: Props) {
+function SelectAsset({ children, filterAssets }: Props) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const {
@@ -39,13 +40,18 @@ function SelectAsset({ children }: Props) {
   } = useWalletState();
   const {
     setTransferTokenId,
+    setTeleportTokenId,
     pages: {
       transfer: { address: toAddress },
     },
   } = useUIState();
 
   const selectAsset = (assetId: string) => {
-    setTransferTokenId(assetId);
+    if (!filterAssets) {
+      setTransferTokenId(assetId);
+    } else {
+      setTeleportTokenId(assetId);
+    }
     setOpen(false);
   };
 
@@ -62,7 +68,9 @@ function SelectAsset({ children }: Props) {
           </DialogDescription>
         </DialogHeader>
         <div className="w-full h-full gap-4 flex flex-col px-2 py-2">
-          <MainAssets assets={assets} selectAsset={selectAsset} />
+          {!filterAssets && (
+            <MainAssets assets={assets} selectAsset={selectAsset} />
+          )}
           <div className="flex w-full  justify-center ">
             <Input
               StartIcon={() => (
@@ -78,6 +86,9 @@ function SelectAsset({ children }: Props) {
           <div className="h-[200px] overflow-y-auto flex flex-col w-full">
             {assets.length > 0 &&
               assets
+                .filter((asset) =>
+                  filterAssets ? filterAssets?.includes(asset.id) : true
+                )
                 .filter(
                   // Search asset
                   (asset) =>

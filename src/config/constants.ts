@@ -1,8 +1,10 @@
 import {
   ArrowRightLeft,
+  FoldHorizontal,
   Github,
   HomeIcon,
   Images,
+  Link,
   PackagePlus,
   Replace,
   SendHorizonal,
@@ -35,6 +37,7 @@ export const MENU = [
   { name: "Transfer", Icon: SendHorizonal, link: "/transfer" },
   { name: "Teleport", Icon: Replace, link: "/teleport" },
   { name: "Swap", Icon: ArrowRightLeft, link: "/swap" },
+  { name: "DOT-KSM Bridge", Icon: FoldHorizontal, link: "/bridge" },
   { name: "Create asset", Icon: PackagePlus, link: "/create" },
   { name: "NFTs", Icon: Images, link: "/nfts" },
 ];

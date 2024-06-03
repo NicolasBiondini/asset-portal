@@ -17,34 +17,50 @@ import { isValidAddress } from "@/helpers/isValidAddress";
 import { useUIState } from "@/data/ui/storage";
 import { parseAddress } from "@/helpers/parseAddress";
 import AccountButton from "@/components/AccountButton";
+import { getNetworkInfo } from "@/config/networks.config";
 
 type Props = {
   children: JSX.Element | JSX.Element[];
+  type?: "transfer" | "teleport";
 };
 
-function SelectAddress({ children }: Props) {
+function SelectAddress({ children, type = "transfer" }: Props) {
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const { walletList, addressList, address: activeAddress } = useWalletState();
   const {
     setTransferAddress,
+    setTeleportAddress,
     pages: {
-      transfer: { address: toAddress },
+      transfer: { address: toAddressTransfer },
+      teleport: { address: toAddressTeleport, parachainId },
     },
   } = useUIState();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (type === "transfer") {
+      const parsedAddress = parseAddress(inputValue);
+      setTransferAddress(parsedAddress);
+    } else {
+      const prefix = getNetworkInfo(parachainId).prefix;
+      const parsedAddress = parseAddress(inputValue, prefix);
+      setTeleportAddress(parsedAddress);
+    }
 
-    const parsedAddress = parseAddress(inputValue);
-    setTransferAddress(parsedAddress);
     setInputValue("");
     setOpen(false);
   };
 
   const handleClick = (address: string) => {
-    const parsedAddress = parseAddress(address);
-    setTransferAddress(parsedAddress);
+    if (type === "transfer") {
+      const parsedAddress = parseAddress(address);
+      setTransferAddress(parsedAddress);
+    } else {
+      const prefix = getNetworkInfo(parachainId).prefix;
+      const parsedAddress = parseAddress(address, prefix);
+      setTeleportAddress(parsedAddress);
+    }
     setOpen(false);
   };
 
@@ -54,10 +70,10 @@ function SelectAddress({ children }: Props) {
       <DialogContent className="dark border-none gap-6">
         <DialogHeader>
           <DialogTitle className="text-foreground ">
-            <p className="font-unbounded"> Add your address.</p>
+            <p className="font-unbounded"> Select address</p>
           </DialogTitle>
           <DialogDescription className="text-sm">
-            Please input your address to be able to see your assets on AssetHub.
+            Please select your destination address.
           </DialogDescription>
         </DialogHeader>
         <Tabs
@@ -109,31 +125,47 @@ function SelectAddress({ children }: Props) {
             value="extensions"
             className="absolute top-14 w-full left-0 "
           >
-            <div className="flex flex-col gap-2">
-              {addressList.map((address) => {
-                return (
-                  <AccountButton
-                    key={address}
-                    address={address}
-                    handleClick={handleClick}
-                    disabled={address === activeAddress}
-                    selected={address === toAddress}
-                  />
-                );
-              })}
-              {walletList.map((wallet) => {
-                return (
-                  <AccountButton
-                    key={wallet.address}
-                    address={wallet.address}
-                    walletId={wallet.walletId}
-                    handleClick={handleClick}
-                    disabled={wallet.address === activeAddress}
-                    selected={wallet.address === toAddress}
-                  />
-                );
-              })}
-            </div>{" "}
+            {addressList.length === 0 && walletList.length === 0 ? (
+              <div className="w-full h-full flex justify-center items-center mt-5">
+                <p className="font-bold font-unbounded text-lg text-white">
+                  {"You don't have any connected wallet 😔."}
+                </p>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                {addressList.map((address) => {
+                  return (
+                    <AccountButton
+                      key={address}
+                      address={address}
+                      handleClick={() => handleClick(address)}
+                      disabled={address === activeAddress}
+                      selected={
+                        type === "transfer"
+                          ? address === toAddressTransfer
+                          : address === parseAddress(toAddressTeleport)
+                      }
+                    />
+                  );
+                })}
+                {walletList.map((wallet) => {
+                  return (
+                    <AccountButton
+                      key={wallet.address}
+                      address={wallet.address}
+                      walletId={wallet.walletId}
+                      handleClick={() => handleClick(wallet.address)}
+                      disabled={wallet.address === activeAddress}
+                      selected={
+                        type === "transfer"
+                          ? wallet.address === toAddressTransfer
+                          : wallet.address === parseAddress(toAddressTeleport)
+                      }
+                    />
+                  );
+                })}
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </DialogContent>

@@ -56,9 +56,9 @@ function TransferPanel({}: Props) {
   };
 
   const handleTransfer = async () => {
-    if (api === null || assetApi === null) return;
+    if (api === null || assetApi === null || !assetInfo) return;
 
-    const amount = convertBigInt(tAmount);
+    const amount = convertBigInt(tAmount, Number(assetInfo.info.decimals));
 
     const injector =
       walletList.length > 0 &&
@@ -94,7 +94,7 @@ function TransferPanel({}: Props) {
       {assets.length === 0 || api === null ? (
         <Skeleton />
       ) : (
-        <form className="flex flex-col w-full max-w-[400px] gap-2 ">
+        <form className="flex flex-col w-full max-w-[400px] gap-4 ">
           <div className={cn("flex flex-col gap-1 rounded-md w-full relative")}>
             <div className="bg-colors-bg-secondary rounded-t-md justify-center ">
               <p className="text-xs font-bold pt-4 pl-4">{"You're sending"}</p>

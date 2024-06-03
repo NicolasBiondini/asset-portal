@@ -28,6 +28,12 @@ export const useUIState = create<UIState>()((set) => {
     setTeleportAddress: (address) => setPageData("teleport", { address }),
     setTeleportTokenId: (tokenId) => setPageData("teleport", { tokenId }),
     setTeleportParachainId: (parachainId) =>
-      setPageData("teleport", { parachainId }),
+      set((state) => ({
+        ...state,
+        pages: {
+          ...state.pages,
+          ["teleport"]: { ...state.pages["teleport"], parachainId },
+        },
+      })),
   };
 });

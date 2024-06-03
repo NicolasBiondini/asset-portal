@@ -1,3 +1,5 @@
+import { Network } from "@/types/networks";
+
 export type Page = "transfer" | "teleport";
 
 export interface InitialState {
@@ -12,7 +14,7 @@ export interface InitialState {
       tokenId: string;
       address: string;
       amount: string;
-      parachainId: string;
+      parachainId: Network;
     };
   };
 }
@@ -29,7 +31,7 @@ export interface UIState extends InitialState {
   setTeleportAmount: (amount: string) => void;
   setTeleportAddress: (address: string) => void;
   setTeleportTokenId: (tokenId: string) => void;
-  setTeleportParachainId: (parachainId: string) => void;
+  setTeleportParachainId: (parachainId: Network) => void;
 }
 
 export const initialState: InitialState = {
@@ -44,7 +46,7 @@ export const initialState: InitialState = {
       tokenId: "DOT",
       address: "",
       amount: "",
-      parachainId: "",
+      parachainId: "POLKADOT",
     },
   },
 };

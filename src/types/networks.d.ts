@@ -22,4 +22,5 @@ export type NetworkInfo = {
   id: string;
   name: string;
   assets: string[];
+  prefix: number;
 };

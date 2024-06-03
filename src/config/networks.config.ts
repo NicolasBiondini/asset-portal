@@ -1,31 +1,67 @@
 import { Network, NetworkInfo } from "@/types/networks";
 
+export const networkList: Network[] = [
+  "POLKADOT",
+  "ACALA",
+  "ASTAR",
+  "CENTRIFUGE",
+  "BITFROST",
+  "INTERLAY",
+  "HYDRADX",
+  "PHALA",
+  "PENDULUM",
+];
+
 // Allowed XCM
 export const networks: { [key in Network]: NetworkInfo } = {
-  POLKADOT: { id: "0", name: "Polkadot", assets: ["DOT"] },
+  POLKADOT: { id: "0", name: "Polkadot", assets: ["DOT"], prefix: 0 },
   ACALA: {
     id: "2000",
     name: "Acala",
     assets: ["DOT", "1337", "1984", "23", "100", "21"],
+    prefix: 10,
   },
-  ASTAR: { id: "2006", name: "Astar", assets: ["DOT", "1337", "1984", "23"] },
+  ASTAR: {
+    id: "2006",
+    name: "Astar",
+    assets: ["DOT", "1337", "1984", "23"],
+    prefix: 5,
+  },
   CENTRIFUGE: {
     id: "2031",
     name: "Centrifuge",
     assets: ["DOT", "1337", "1984"],
+    prefix: 36,
   },
   BITFROST: {
     id: "2030",
     name: "Bitfrost",
     assets: ["DOT", "1984", "1337", "30", "23"],
+    prefix: 6,
   },
-  INTERLAY: { id: "2032", name: "Interlay", assets: ["DOT", "1984", "1337"] },
-  HYDRADX: { id: "2034", name: "HydraDX", assets: ["DOT", "1984", "1337"] },
-  PHALA: { id: "2035", name: "Phala Network", assets: ["DOT", "23"] },
+  INTERLAY: {
+    id: "2032",
+    name: "Interlay",
+    assets: ["DOT", "1984", "1337"],
+    prefix: 2032,
+  },
+  HYDRADX: {
+    id: "2034",
+    name: "HydraDX",
+    assets: ["DOT", "1984", "1337"],
+    prefix: 63,
+  },
+  PHALA: {
+    id: "2035",
+    name: "Phala Network",
+    assets: ["DOT", "23"],
+    prefix: 30,
+  },
   PENDULUM: {
     id: "2094",
     name: "Pendulum",
     assets: ["DOT", "1984", "1337", "23"],
+    prefix: 56,
   },
   // NOTICE: The following networks have XCM but does not accept XCM tokens by:
   // https://github.com/paritytech/asset-transfer-api-registry/blob/main/docs/registry.json
@@ -39,4 +75,8 @@ export const networks: { [key in Network]: NetworkInfo } = {
   //   ZEITGEIST: { id: "2092", name: "Zeitgeist", assets: [] }, // Does not accept XCM tokens.
   //   MANTA: { id: "2104", name: "Manta Atlantic", assets: [] }, // Does not accept XCM tokens.
   //   MYTHOS: { id: "3369", name: "Mythos", assets: [] }, // Does not accept XCM tokens.
+};
+
+export const getNetworkInfo = (network: Network) => {
+  return networks[network];
 };

@@ -10,7 +10,7 @@ import { parseAddress } from "@/helpers/parseAddress";
 import { transfer } from "@/methods";
 import { Skeleton } from "./Skeleton";
 import AddAddressModal from "@/components/modals/AddAddressModal";
-import { ChevronDown, Wallet } from "lucide-react";
+import { ChevronDown, Info, Wallet } from "lucide-react";
 import { shortenAddress } from "@/helpers/shortenAddress";
 import { getWalletCopy } from "@/config/wallets.config";
 import SelectAddress from "@/components/modals/transfer/SelectAddress";
@@ -18,10 +18,16 @@ import SelectAsset from "@/components/modals/SelectAsset";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { getAssetIcon } from "@/config/icons.config";
+import { Switch } from "@/components/ui/switch";
+import { useEffect, useState } from "react";
+import Tooltip from "@/components/Tooltip";
+import { getNetworkInfo } from "@/config/networks.config";
+import SelectToNetwork from "@/components/modals/teleport/SelectToNetwork";
 
 type Props = {};
 
 function TeleportPanel({}: Props) {
+  const [checked, setChecked] = useState(false);
   const { api, assetApi } = useConnectionState();
   const {
     address,
@@ -34,6 +40,7 @@ function TeleportPanel({}: Props) {
       teleport: { tokenId, parachainId, amount: tAmount, address: toAddress },
     },
     setTeleportAmount,
+    setTeleportAddress,
   } = useUIState();
   const { toast } = useToast();
 
@@ -41,8 +48,12 @@ function TeleportPanel({}: Props) {
   const assetInfo =
     assets.length > 0 && assets.filter((asset) => asset.id === tokenId)[0];
 
+  const networkInfo = getNetworkInfo(parachainId);
+
   // Check if it's wallet to get wallet Icon
-  const isWallet = walletList.filter((wallet) => wallet.address === toAddress);
+  const isWallet = walletList.filter(
+    (wallet) => wallet.address === parseAddress(toAddress)
+  );
 
   const getDisabled = () => {
     if (api === null || assetApi === null || tAmount === "" || tokenId === "")
@@ -53,14 +64,15 @@ function TeleportPanel({}: Props) {
         Number(tAmount) <= 0
       )
         return true;
+      if (toAddress === "" && checked) return true;
       return false;
     }
     return true;
   };
 
   const handleTransfer = async () => {
-    if (api === null || assetApi === null) return;
-    const amount = convertBigInt(tAmount);
+    if (api === null || assetApi === null || !assetInfo || !address) return;
+    const amount = convertBigInt(tAmount, Number(assetInfo.info.decimals));
 
     const injector = walletList.filter((w) => w.address === address)[0]
       .injected;
@@ -73,9 +85,12 @@ function TeleportPanel({}: Props) {
       txInfo: {
         amount,
         tokenId,
-        address: parseAddress(toAddress, 5),
+        address:
+          toAddress === "" || !checked
+            ? parseAddress(address, networkInfo.prefix)
+            : toAddress,
       },
-      parachainId,
+      parachainId: networkInfo.id,
     });
     if (res.status === "error")
       return toast({
@@ -88,6 +103,15 @@ function TeleportPanel({}: Props) {
       variant: "success",
     });
   };
+
+  // To parse address when the user change selected network
+  useEffect(() => {
+    if (toAddress === "" || !checked) return;
+    if (toAddress === parseAddress(toAddress, networkInfo.prefix)) return;
+    console.log("changed:", parseAddress(toAddress, networkInfo.prefix));
+    setTeleportAddress(parseAddress(toAddress, networkInfo.prefix));
+  }, [parachainId, toAddress, networkInfo.prefix, setTeleportAddress, checked]);
+
   return (
     <Tabs
       defaultValue="from"
@@ -115,11 +139,24 @@ function TeleportPanel({}: Props) {
           {api === null ? (
             <Skeleton />
           ) : (
-            <form className="flex flex-col w-full max-w-[400px] gap-2 ">
+            <form className="flex flex-col w-full max-w-[400px] gap-4 ">
               <div
                 className={cn("flex flex-col gap-1 rounded-md w-full relative")}
               >
-                <div className="bg-colors-bg-secondary rounded-t-md justify-center ">
+                {" "}
+                <SelectToNetwork>
+                  <Button className="bg-colors-bg-secondary hover:bg-colors-bg-secondary !h-[60px]  rounded-b-none hover:opacity-70 font-bold justify-between">
+                    <div className="flex gap-1 items-center">
+                      <p className=" text-colors-font-primary">To: </p>
+                      <AssetIcon className="w-8 h-8" />
+                      <p>{networkInfo && networkInfo.name}</p>
+                    </div>
+                    <div>
+                      <ChevronDown />
+                    </div>
+                  </Button>
+                </SelectToNetwork>
+                <div className="bg-colors-bg-secondary  justify-center ">
                   <p className="text-xs font-bold pt-4 pl-4">
                     {"You're sending"}
                   </p>
@@ -150,7 +187,7 @@ function TeleportPanel({}: Props) {
                     </div>
                   )}
                 </div>
-                <SelectAsset>
+                <SelectAsset filterAssets={networkInfo.assets}>
                   <Button className="bg-colors-bg-secondary hover:bg-colors-bg-secondary !h-[60px]  rounded-t-none hover:opacity-70 font-bold justify-between">
                     <div className="flex gap-1 items-center">
                       <AssetIcon className="w-8 h-8" />
@@ -162,48 +199,69 @@ function TeleportPanel({}: Props) {
                   </Button>
                 </SelectAsset>
               </div>
-
-              <SelectAddress>
-                <Button className="flex items-center bg-colors-bg-secondary hover:bg-colors-bg-secondary justify-start pt-7 pb-6  hover:opacity-70 font-bold ">
-                  {toAddress === "" ? (
-                    <p className="text-center w-full">
-                      Select destination address
-                    </p>
-                  ) : isWallet.length > 0 ? (
-                    isWallet.map((wallet) => {
-                      const Icon = getWalletCopy.getIcon(wallet.walletId);
-                      return (
+              <div className="w-full flex flex-col gap-2">
+                <div className="flex justify-between items-center">
+                  <div className="flex gap-1 items-center ">
+                    <p className="">Custom address</p>
+                    <Tooltip
+                      className="max-w-[200px]"
+                      message={
+                        "When 'Custom Address' is disabled, the teleport will be performed to the account of the wallet currently in use. When enabled, you can specify a custom address."
+                      }
+                    >
+                      <Info className="h-4 w-4 text-colors-pink-dot hover:text-colors-pink-secondary transition-all cursor-pointer" />
+                    </Tooltip>
+                  </div>
+                  <Switch
+                    checked={checked}
+                    onCheckedChange={() => setChecked(!checked)}
+                  />
+                </div>
+                {checked && (
+                  <SelectAddress type="teleport">
+                    <Button className="flex items-center bg-colors-bg-secondary hover:bg-colors-bg-secondary justify-start pt-7 pb-6  hover:opacity-70 font-bold ">
+                      {toAddress === "" ? (
+                        <p className="text-center w-full">
+                          Select destination address
+                        </p>
+                      ) : isWallet.length > 0 ? (
+                        isWallet.map((wallet) => {
+                          const Icon = getWalletCopy.getIcon(wallet.walletId);
+                          return (
+                            <div
+                              className="flex gap-1 h-full relative justify-center items-center"
+                              key={`wallet-${wallet.address}-button-selected`}
+                            >
+                              <p className="absolute text-xs text-colors-font-seconday -top-5 left-0">
+                                To:{" "}
+                              </p>
+                              <Icon className="w-5 h-5 mt-2 ml-6" />{" "}
+                              <p className="mt-3 text-white">
+                                {shortenAddress(toAddress, 16)}
+                              </p>
+                            </div>
+                          );
+                        })
+                      ) : (
                         <div
                           className="flex gap-1 h-full relative justify-center items-center"
-                          key={`wallet-${wallet.address}-button-selected`}
+                          key={`toAddress-${toAddress}-button-selected`}
                         >
                           <p className="absolute text-xs text-colors-font-seconday -top-5 left-0">
                             To:{" "}
                           </p>
-                          <Icon className="w-5 h-5 mt-2 ml-6" />{" "}
-                          <p className="mt-3 text-white">
+                          <Wallet className="w-5 h-5 mt-2 ml-6  text-colors-pink-dot" />
+
+                          <p className="mt-3  text-white">
                             {shortenAddress(toAddress, 16)}
                           </p>
                         </div>
-                      );
-                    })
-                  ) : (
-                    <div
-                      className="flex gap-1 h-full relative justify-center items-center"
-                      key={`toAddress-${toAddress}-button-selected`}
-                    >
-                      <p className="absolute text-xs text-colors-font-seconday -top-5 left-0">
-                        To:{" "}
-                      </p>
-                      <Wallet className="w-5 h-5 mt-2 ml-6  text-colors-pink-dot" />
+                      )}
+                    </Button>
+                  </SelectAddress>
+                )}
+              </div>
 
-                      <p className="mt-3  text-white">
-                        {shortenAddress(toAddress, 16)}
-                      </p>
-                    </div>
-                  )}
-                </Button>
-              </SelectAddress>
               {walletList.filter((wallet) => wallet.address === address)
                 .length > 0 ? (
                 <Button
