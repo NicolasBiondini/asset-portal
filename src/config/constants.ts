@@ -1,19 +1,28 @@
 import {
   ArrowRightLeft,
+  Github,
   HomeIcon,
   Images,
   PackagePlus,
   Replace,
   SendHorizonal,
+  Twitter,
 } from "lucide-react";
 export const RPC_ENDPOINT = "wss://asset-hub-polkadot-rpc.dwellir.com/";
 export const LINKS: {
   wallets: { "polkadot-js": string; talisman: string; "subwallet-js": string };
+  socialMedia: {
+    [key: string]: string;
+  };
 } = {
   wallets: {
     "polkadot-js": "https://polkadot.js.org/extension/",
     talisman: "https://www.talisman.xyz/",
     "subwallet-js": "https://www.subwallet.app/",
+  },
+  socialMedia: {
+    twitter_nachito: "https://x.com/NachitoEth",
+    twitter_nicolas: "https://x.com/BiondiniNicolas",
   },
 };
 
@@ -28,6 +37,19 @@ export const MENU = [
   { name: "Swap", Icon: ArrowRightLeft, link: "/swap" },
   { name: "Create asset", Icon: PackagePlus, link: "/create" },
   { name: "NFTs", Icon: Images, link: "/nfts" },
+];
+
+export const SUB_MENU_LINKS = [
+  {
+    name: "github",
+    Icon: Github,
+    link: "https://github.com/NicolasBiondini/asset-portal",
+  },
+  {
+    name: "twitter",
+    Icon: Twitter,
+    link: "https://github.com/NicolasBiondini/asset-portal",
+  },
 ];
 
 export const WIP_IMAGES = [

@@ -9,11 +9,15 @@ import {
 import { Button } from "./ui/button";
 import { useUIState } from "@/data/ui/storage";
 import { cn } from "@/lib/utils";
-import { MenuIcon } from "lucide-react";
+import { GlobeLock, Info, MenuIcon } from "lucide-react";
 import { Unbounded } from "next/font/google";
 import { AssetHub } from "./icons/assets";
 import Menu from "./Menu";
 import { useState } from "react";
+import Link from "next/link";
+import { SUB_MENU_LINKS } from "@/config/constants";
+import SelectNetworkAssetHub from "./modals/SelectNetworkAssetHub";
+import { useRouter } from "next/router";
 const unbounded = Unbounded({
   subsets: ["latin"],
   variable: "--font-unbounded",
@@ -22,6 +26,7 @@ const unbounded = Unbounded({
 function NavModal() {
   const [open, setOpen] = useState(false);
   const { mode } = useUIState();
+  const rourter = useRouter();
 
   const handleClose = () => {
     setOpen(!open);
@@ -51,10 +56,63 @@ function NavModal() {
               </h1>
             </div>
           </SheetTitle>
-          <SheetDescription className="flex flex-col gap-2 font-unbounded">
-            <Menu type="mobile" handleClose={handleClose} />
-          </SheetDescription>
+          <SheetDescription className="flex flex-col gap-2 font-unbounded justify-between h-full "></SheetDescription>
         </SheetHeader>
+        <nav className="flex flex-col gap-2 h-[85%] justify-between text-colors-font-seconday font-unbounded">
+          <Menu type="mobile" handleClose={handleClose} />
+          <div className="flex w-full gap-6 flex-col">
+            <div className="flex flex-col gap-2">
+              <SelectNetworkAssetHub>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "h-[35px] border-colors-bg-light text-colors-font-seconday hover:scale-[102%] transition-all  hover:bg-card gap-2 items-center hover:text-white w-full flex justify-between text-xs"
+                  )}
+                >
+                  <div className="flex gap-2">
+                    <GlobeLock className="w-4 h-4" />
+                    <p> Network</p>
+                  </div>
+                  <span className="w-2 h-2 rounded-full bg-green-400 flex"></span>
+                </Button>
+              </SelectNetworkAssetHub>
+              <Link className="w-full" href={"/about"}>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    {
+                      "text-white border-colors-pink-dot":
+                        rourter.asPath === "/about",
+                    },
+                    {
+                      "border-colors-bg-light text-colors-font-seconday":
+                        rourter.asPath !== "/about",
+                    },
+                    "h-[35px] hover:scale-[102%] transition-all  hover:bg-card gap-2 items-center hover:text-white w-full flex justify-start text-xs"
+                  )}
+                >
+                  <Info className="w-4 h-4" />
+                  <p> About us</p>
+                </Button>
+              </Link>
+            </div>
+
+            <div className="flex gap-2 w-full">
+              {SUB_MENU_LINKS.map((link) => {
+                return (
+                  <Link
+                    key={link.name}
+                    href={link.link}
+                    className="group"
+                    target="_blank"
+                  >
+                    <link.Icon className="w-5 h-5 group-hover:text-white transition-all" />
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </nav>
       </SheetContent>
     </Sheet>
   );
