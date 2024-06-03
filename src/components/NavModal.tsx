@@ -73,7 +73,7 @@ function NavModal() {
                     <GlobeLock className="w-4 h-4" />
                     <p> Network</p>
                   </div>
-                  <span className="w-2 h-2 rounded-full bg-green-400 flex"></span>
+                  <span className="w-2 h-2 animate-pulse rounded-full bg-green-400 flex"></span>
                 </Button>
               </SelectNetworkAssetHub>
               <Link className="w-full" href={"/about"}>

@@ -54,7 +54,7 @@ function SelectNetworkAssetHub({ children }: Props) {
                 Polkadot Asset Hub
               </p>
             </div>
-            <span className="w-2 h-2 rounded-full bg-green-400 flex"></span>
+            <span className="w-2 h-2 animate-pulse rounded-full bg-green-400 flex"></span>
           </Button>
           <Button
             variant={"outline"}
