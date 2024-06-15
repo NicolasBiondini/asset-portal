@@ -24,3 +24,18 @@ export type NetworkInfo = {
   assets: string[];
   prefix: number;
 };
+
+// DEFI Ecosystem
+export type Parachains =
+  | "Hydration"
+  | "Bifrost"
+  | "Acala"
+  | "Equilibrium"
+  | "Interlay";
+
+export interface Parachain {
+  id: string;
+  name: string;
+  description: string;
+  link: string;
+}
