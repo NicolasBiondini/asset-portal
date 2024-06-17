@@ -35,5 +35,13 @@ export const useUIState = create<UIState>()((set) => {
           ["teleport"]: { ...state.pages["teleport"], parachainId },
         },
       })),
+    setCreateData: (data) => setPageData("create", data),
+    setCreateAssetId: (assetId) => setPageData("create", { assetId }),
+    setCreateName: (name) => setPageData("create", { name }),
+    setCreateSymbol: (symbol) => setPageData("create", { symbol }),
+    setCreateDecimals: (decimals) => setPageData("create", { decimals }),
+    setCreateMinBalance: (minBalance) => setPageData("create", { minBalance }),
+    setCreateInitialMint: (initialMint) =>
+      setPageData("create", { initialMint }),
   };
 });

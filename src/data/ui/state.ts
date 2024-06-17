@@ -1,6 +1,6 @@
 import { Network } from "@/types/networks";
 
-export type Page = "transfer" | "teleport";
+export type Page = "transfer" | "teleport" | "create";
 
 export interface InitialState {
   mode: "light" | "dark";
@@ -15,6 +15,14 @@ export interface InitialState {
       address: string;
       amount: string;
       parachainId: Network;
+    };
+    create: {
+      assetId: number;
+      name: string;
+      symbol: string;
+      decimals: number;
+      minBalance: string;
+      initialMint: string;
     };
   };
 }
@@ -32,6 +40,14 @@ export interface UIState extends InitialState {
   setTeleportAddress: (address: string) => void;
   setTeleportTokenId: (tokenId: string) => void;
   setTeleportParachainId: (parachainId: Network) => void;
+  // Create asset page
+  setCreateData: ({ ...data }: InitialState["pages"]["create"]) => void;
+  setCreateAssetId: (assetId: number) => void;
+  setCreateName: (name: string) => void;
+  setCreateSymbol: (symbol: string) => void;
+  setCreateDecimals: (decimals: number) => void;
+  setCreateMinBalance: (minBalance: string) => void;
+  setCreateInitialMint: (initialMint: string) => void;
 }
 
 export const initialState: InitialState = {
@@ -47,6 +63,14 @@ export const initialState: InitialState = {
       address: "",
       amount: "",
       parachainId: "POLKADOT",
+    },
+    create: {
+      assetId: 0,
+      name: "",
+      symbol: "",
+      decimals: 0,
+      minBalance: "",
+      initialMint: "",
     },
   },
 };
