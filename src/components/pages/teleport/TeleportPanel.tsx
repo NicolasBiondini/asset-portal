@@ -51,9 +51,12 @@ function TeleportPanel({}: Props) {
   const networkInfo = getNetworkInfo(parachainId);
 
   // Check if it's wallet to get wallet Icon
-  const isWallet = walletList.filter(
-    (wallet) => wallet.address === parseAddress(toAddress)
-  );
+  const isWallet =
+    walletList.length > 0
+      ? walletList.filter(
+          (wallet) => wallet.address === parseAddress(toAddress)
+        )
+      : walletList;
 
   const getDisabled = () => {
     if (api === null || assetApi === null || tAmount === "" || tokenId === "")

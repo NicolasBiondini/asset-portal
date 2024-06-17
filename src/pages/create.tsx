@@ -1,4 +1,5 @@
 import WIP from "@/components/WIP";
+import CreateAssetPanel from "@/components/pages/create/CreateAssetPanel";
 import React from "react";
 
 type Props = {};
@@ -22,7 +23,7 @@ function create({}: Props) {
           </p>
         </div>
         <div className="flex flex-col w-full h-[80%] items-center justify-start mt-auto  ">
-          <WIP />
+          <CreateAssetPanel />
         </div>
       </div>
     </section>

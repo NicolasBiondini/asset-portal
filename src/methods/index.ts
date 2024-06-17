@@ -1,3 +1,4 @@
 import { transfer } from "./transfer";
-
-export { transfer };
+import { createAsset } from "./createAsset";
+import { mintAsset } from "./mintAsset";
+export { transfer, createAsset, mintAsset };
