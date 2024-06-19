@@ -38,6 +38,7 @@ export const useWalletState = create<UIState>()((set) => ({
       ...state,
       address: wallet.address,
       walletList: [...state.walletList, wallet],
+      wallet: wallet,
     }));
   },
   removeAddress: (address, walletId) => {
@@ -62,11 +63,18 @@ export const useWalletState = create<UIState>()((set) => ({
 
       if (!!walletId) {
         // Is wallet
-
+        let newWallet = null;
+        if (state.wallet?.address === address) {
+          if (state.walletList.length > 0) {
+            const arr = state.walletList.filter((a) => a.address !== address);
+            newWallet = arr.length > 0 ? arr[0] : null;
+          }
+        }
         // remove it from the list
         return {
           ...state,
           address: newSelectedAddress,
+          wallet: newWallet,
           walletList: state.walletList.filter((a) => a.address !== address),
           balances: balancesCopy,
           loaded: true,

@@ -25,6 +25,9 @@ import {
   validateString,
 } from "@/helpers/fieldValidators";
 import Link from "next/link";
+import { useToast } from "@/components/ui/use-toast";
+import { createAsset } from "@/methods";
+import { useConnectionState } from "@/data/connection/storage";
 
 const steps = [
   { label: "Info", icon: PackagePlus },
@@ -33,7 +36,7 @@ const steps = [
 ] satisfies StepItem[];
 
 export default function StepperCreateAsset() {
-  const { walletList, address } = useWalletState();
+  const { walletList, address, wallet } = useWalletState();
 
   return (
     <div className="flex w-full flex-col gap-4">
@@ -79,9 +82,7 @@ export default function StepperCreateAsset() {
             );
           }
         })}
-        {walletList.length === 0 ||
-        walletList.filter((wallet) => wallet.address !== address).length !==
-          0 ? (
+        {!wallet || wallet.address !== address ? (
           <div className="flex w-full justify-end items-end">
             <AddAddressModal>
               <Button
@@ -102,6 +103,9 @@ export default function StepperCreateAsset() {
 }
 
 const Footer = () => {
+  const { toast } = useToast();
+  const { api } = useConnectionState();
+  const { wallet } = useWalletState();
   const {
     nextStep,
     prevStep,
@@ -155,7 +159,61 @@ const Footer = () => {
 
   const handleNextStep = async () => {
     if (!isLastStep) return nextStep();
-    // TODO: Add functionality here
+    if (!wallet || api === null) return;
+
+    // TODO: Parse data here
+    const result = await createAsset({
+      api,
+      sender: { address: wallet.address, injector: wallet.injected },
+      handleToast,
+      assetInfo: {
+        assetId: 22,
+        admin: "",
+        minBalance: 1000,
+        name: "",
+        symbol: "",
+        decimals: 100,
+        amount: BigInt(100),
+      },
+    });
+    if (result.status === "err") {
+      return toast({
+        title: "Something went wrong 😔",
+        description:
+          "Something went wrong with your transaction, please try again.",
+        variant: "destructive",
+      });
+    } else {
+      // TODO: SUBSCAN LINK HERE
+      toast({
+        title: "Asset created sussefully 🚀",
+        description: "Congrats! Your asset was created! 🎉",
+        variant: "success",
+      });
+      return nextStep();
+    }
+  };
+
+  const handleToast = ({
+    title,
+    description,
+    variant,
+  }: {
+    title: string;
+    description: string;
+    variant:
+      | "default"
+      | "destructive"
+      | "success"
+      | "warning"
+      | null
+      | undefined;
+  }) => {
+    toast({
+      title,
+      description,
+      variant,
+    });
   };
 
   return (

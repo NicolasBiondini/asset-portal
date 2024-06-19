@@ -7,6 +7,7 @@ export interface InitialState {
   assetsMetadata: AssetMetadata[];
   balances: { [key: string]: Balance };
   address: string;
+  wallet: Wallet | null;
   addressList: string[];
   walletList: Wallet[];
 }
@@ -26,6 +27,7 @@ export const initialState: InitialState = {
   assetsMetadata: [],
   balances: {},
   address: "",
+  wallet: null,
   addressList: [],
   walletList: [],
 };

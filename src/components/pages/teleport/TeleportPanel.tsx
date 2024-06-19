@@ -31,6 +31,7 @@ function TeleportPanel({}: Props) {
   const { api, assetApi } = useConnectionState();
   const {
     address,
+    wallet,
     walletList,
     assetsMetadata: assets,
     balances,
@@ -51,12 +52,9 @@ function TeleportPanel({}: Props) {
   const networkInfo = getNetworkInfo(parachainId);
 
   // Check if it's wallet to get wallet Icon
-  const isWallet =
-    walletList.length > 0
-      ? walletList.filter(
-          (wallet) => wallet.address === parseAddress(toAddress)
-        )
-      : walletList;
+  const isWallet = wallet?.address === address ? wallet : false;
+
+  const Icon = !!isWallet && getWalletCopy.getIcon(isWallet.walletId);
 
   const getDisabled = () => {
     if (api === null || assetApi === null || tAmount === "" || tokenId === "")
@@ -227,24 +225,19 @@ function TeleportPanel({}: Props) {
                         <p className="text-center w-full">
                           Select destination address
                         </p>
-                      ) : isWallet.length > 0 ? (
-                        isWallet.map((wallet) => {
-                          const Icon = getWalletCopy.getIcon(wallet.walletId);
-                          return (
-                            <div
-                              className="flex gap-1 h-full relative justify-center items-center"
-                              key={`wallet-${wallet.address}-button-selected`}
-                            >
-                              <p className="absolute text-xs text-colors-font-seconday -top-5 left-0">
-                                To:{" "}
-                              </p>
-                              <Icon className="w-5 h-5 mt-2 ml-6" />{" "}
-                              <p className="mt-3 text-white">
-                                {shortenAddress(toAddress, 16)}
-                              </p>
-                            </div>
-                          );
-                        })
+                      ) : !!isWallet ? (
+                        <div
+                          className="flex gap-1 h-full relative justify-center items-center"
+                          key={`wallet-${isWallet.address}-button-selected`}
+                        >
+                          <p className="absolute text-xs text-colors-font-seconday -top-5 left-0">
+                            To:{" "}
+                          </p>
+                          {!!Icon && <Icon className="w-5 h-5 mt-2 ml-6" />}
+                          <p className="mt-3 text-white">
+                            {shortenAddress(toAddress, 16)}
+                          </p>
+                        </div>
                       ) : (
                         <div
                           className="flex gap-1 h-full relative justify-center items-center"
