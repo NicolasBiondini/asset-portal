@@ -8,12 +8,13 @@ type AssetInfo = {
   name: string;
   symbol: string;
   decimals: number;
+  amount: bigint;
 };
 
 export const createAsset = async ({
   api,
   sender,
-  assetInfo: { assetId, admin, minBalance, name, symbol, decimals },
+  assetInfo: { assetId, admin, minBalance, name, symbol, decimals, amount },
 }: {
   api: ApiPromise;
   sender: Sender;
@@ -21,7 +22,9 @@ export const createAsset = async ({
 }) => {
   const createTx = api.tx.assets.create(assetId, admin, minBalance);
   const metadataTx = api.tx.assets.setMetadata(assetId, name, symbol, decimals);
-  const batchTx = api.tx.utility.batch([createTx, metadataTx]);
+  const mintTx = api.tx.assets.mint(assetId, sender.address, amount);
+
+  const batchTx = api.tx.utility.batch([createTx, metadataTx, mintTx]);
 
   try {
     const unsub = await batchTx.signAndSend(

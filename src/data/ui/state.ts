@@ -1,4 +1,5 @@
 import { Network } from "@/types/networks";
+import { ErrorLabel, InputUI } from "@/types/ui";
 
 export type Page = "transfer" | "teleport" | "create";
 
@@ -17,12 +18,12 @@ export interface InitialState {
       parachainId: Network;
     };
     create: {
-      assetId: number;
-      name: string;
-      symbol: string;
-      decimals: number;
-      minBalance: string;
-      initialMint: string;
+      assetId: InputUI;
+      name: InputUI;
+      symbol: InputUI;
+      decimals: InputUI;
+      minBalance: InputUI;
+      initialMint: InputUI;
     };
   };
 }
@@ -42,12 +43,13 @@ export interface UIState extends InitialState {
   setTeleportParachainId: (parachainId: Network) => void;
   // Create asset page
   setCreateData: ({ ...data }: InitialState["pages"]["create"]) => void;
-  setCreateAssetId: (assetId: number) => void;
-  setCreateName: (name: string) => void;
-  setCreateSymbol: (symbol: string) => void;
-  setCreateDecimals: (decimals: number) => void;
-  setCreateMinBalance: (minBalance: string) => void;
-  setCreateInitialMint: (initialMint: string) => void;
+  resetCreate: () => void;
+  setCreateAssetId: (assetId: InputUI) => void;
+  setCreateName: (name: InputUI) => void;
+  setCreateSymbol: (symbol: InputUI) => void;
+  setCreateDecimals: (decimals: InputUI) => void;
+  setCreateMinBalance: (minBalance: InputUI) => void;
+  setCreateInitialMint: (initialMint: InputUI) => void;
 }
 
 export const initialState: InitialState = {
@@ -65,12 +67,12 @@ export const initialState: InitialState = {
       parachainId: "POLKADOT",
     },
     create: {
-      assetId: 0,
-      name: "",
-      symbol: "",
-      decimals: 0,
-      minBalance: "",
-      initialMint: "",
+      assetId: { value: "", err: "" },
+      name: { value: "", err: "" },
+      symbol: { value: "", err: "" },
+      decimals: { value: "", err: "" },
+      minBalance: { value: "", err: "" },
+      initialMint: { value: "", err: "" },
     },
   },
 };

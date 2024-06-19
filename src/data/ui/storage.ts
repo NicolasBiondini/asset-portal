@@ -43,5 +43,8 @@ export const useUIState = create<UIState>()((set) => {
     setCreateMinBalance: (minBalance) => setPageData("create", { minBalance }),
     setCreateInitialMint: (initialMint) =>
       setPageData("create", { initialMint }),
+    resetCreate: () => {
+      setPageData("create", initialState.pages.create);
+    },
   };
 });
