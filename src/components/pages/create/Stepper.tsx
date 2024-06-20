@@ -32,6 +32,7 @@ import { useConnectionState } from "@/data/connection/storage";
 import { convertBigInt } from "@/helpers/convertBigInt";
 import { LINKS } from "@/config/constants";
 import { ToastAction } from "@/components/ui/toast";
+import { useInvalidate } from "@/query/invalidate";
 
 const steps = [
   { label: "Info", icon: PackagePlus },
@@ -110,6 +111,7 @@ const Footer = () => {
   const { toast } = useToast();
   const { api } = useConnectionState();
   const { wallet } = useWalletState();
+  const { invalidateAssetsQuery, invalidateBalancesQuery } = useInvalidate();
   const {
     nextStep,
     prevStep,
@@ -200,6 +202,8 @@ const Footer = () => {
         variant: "destructive",
       });
     } else {
+      invalidateAssetsQuery();
+      invalidateBalancesQuery();
       toast({
         title: "Asset created sussefully 🚀",
         description: "Congrats! Your asset was created! 🎉",

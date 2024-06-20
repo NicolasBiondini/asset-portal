@@ -51,7 +51,7 @@ export const useAssets = () => {
   } = useQuery({
     queryKey: ["assets"],
     queryFn: () => fetchAssets(api),
-    enabled: api !== null,
+    enabled: !!api,
   });
 
   useEffect(() => {
