@@ -7,7 +7,17 @@ import {
   PinkIcon,
   StinkIcon,
 } from "@/components/icons/assets";
-import { AcalaIcon, AstarIcon } from "@/components/icons/networks";
+import {
+  AcalaIcon,
+  AstarIcon,
+  BifrostIcon,
+  CentrifugeIcon,
+  EquilibriumIcon,
+  HydraIcon,
+  InterlayIcon,
+  PendulumIcon,
+  PhalaIcon,
+} from "@/components/icons/networks";
 import { Network } from "@/types/networks";
 
 const AssetIcons: {
@@ -35,6 +45,13 @@ const NetworkIcons: {
   POLKADOT: DotIcon,
   ACALA: AcalaIcon,
   ASTAR: AstarIcon,
+  BIFROST: BifrostIcon,
+  HYDRA: HydraIcon,
+  EQUILIBRIUM: EquilibriumIcon,
+  INTERLAY: InterlayIcon,
+  CENTRIFUGE: CentrifugeIcon,
+  PHALA: PhalaIcon,
+  PENDULUM: PendulumIcon,
 };
 
 export const getNetworkIcon = (network: Network) => {
@@ -49,6 +66,10 @@ const ParachainsIcons: {
   [key: string]: ({ className }: { className: string }) => JSX.Element;
 } = {
   Acala: AcalaIcon,
+  Bifrost: BifrostIcon,
+  Hydration: HydraIcon,
+  Equilibrium: EquilibriumIcon,
+  Interlay: InterlayIcon,
 };
 
 export const getParachainsIcon = (parachain: string) => {

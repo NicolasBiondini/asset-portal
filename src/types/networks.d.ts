@@ -3,9 +3,9 @@ export type Network =
   | "ACALA"
   | "ASTAR"
   | "CENTRIFUGE"
-  | "BITFROST"
+  | "BIFROST"
   | "INTERLAY"
-  | "HYDRADX"
+  | "HYDRA"
   | "PHALA"
   | "PENDULUM";
 //   | "CRUST"

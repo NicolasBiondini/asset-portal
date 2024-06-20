@@ -5,9 +5,9 @@ export const networkList: Network[] = [
   "ACALA",
   "ASTAR",
   "CENTRIFUGE",
-  "BITFROST",
+  "BIFROST",
   "INTERLAY",
-  "HYDRADX",
+  "HYDRA",
   "PHALA",
   "PENDULUM",
 ];
@@ -33,9 +33,9 @@ export const networks: { [key in Network]: NetworkInfo } = {
     assets: ["DOT", "1337", "1984"],
     prefix: 36,
   },
-  BITFROST: {
+  BIFROST: {
     id: "2030",
-    name: "Bitfrost",
+    name: "Bifrost",
     assets: ["DOT", "1984", "1337", "30", "23"],
     prefix: 6,
   },
@@ -45,9 +45,9 @@ export const networks: { [key in Network]: NetworkInfo } = {
     assets: ["DOT", "1984", "1337"],
     prefix: 2032,
   },
-  HYDRADX: {
+  HYDRA: {
     id: "2034",
-    name: "HydraDX",
+    name: "Hydration",
     assets: ["DOT", "1984", "1337"],
     prefix: 63,
   },
