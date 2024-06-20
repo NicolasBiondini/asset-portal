@@ -53,7 +53,7 @@ export const SUB_MENU_LINKS = [
   {
     name: "twitter",
     Icon: Twitter,
-    link: "https://github.com/NicolasBiondini/asset-portal",
+    link: "https://x.com/AssetPortal",
   },
 ];
 

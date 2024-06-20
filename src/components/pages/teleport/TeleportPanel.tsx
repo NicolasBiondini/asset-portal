@@ -17,7 +17,7 @@ import SelectAddress from "@/components/modals/transfer/SelectAddress";
 import SelectAsset from "@/components/modals/SelectAsset";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { getAssetIcon } from "@/config/icons.config";
+import { getAssetIcon, getNetworkIcon } from "@/config/icons.config";
 import { Switch } from "@/components/ui/switch";
 import { useEffect, useState } from "react";
 import Tooltip from "@/components/Tooltip";
@@ -44,6 +44,8 @@ function TeleportPanel({}: Props) {
     setTeleportAddress,
   } = useUIState();
   const { toast } = useToast();
+
+  const NetworkIcon = getNetworkIcon(parachainId);
 
   const AssetIcon = getAssetIcon(tokenId);
   const assetInfo =
@@ -149,7 +151,7 @@ function TeleportPanel({}: Props) {
                   <Button className="bg-colors-bg-secondary hover:bg-colors-bg-secondary !h-[60px]  rounded-b-none hover:opacity-70 font-bold justify-between">
                     <div className="flex gap-1 items-center">
                       <p className=" text-colors-font-primary">To: </p>
-                      <AssetIcon className="w-8 h-8" />
+                      <NetworkIcon className="w-8 h-8" />
                       <p>{networkInfo && networkInfo.name}</p>
                     </div>
                     <div>

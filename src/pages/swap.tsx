@@ -3,6 +3,7 @@ import { AssetHub } from "@/components/icons/assets";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { defiEcosystem } from "@/config/defi.config";
+import { getNetworkIcon, getParachainsIcon } from "@/config/icons.config";
 import { Parachain } from "@/types/networks";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -77,12 +78,13 @@ function swap({}: Props) {
 export default swap;
 
 const DefiEcosystemCard = ({ parachain }: { parachain: Parachain }) => {
+  const NetworkIcon = getParachainsIcon(parachain.name);
   return (
     <div className="w-full h-[180px] flex flex-col gap-3 justify-center bg-colors-bg-secondary rounded-md py-6 px-6">
       <div className="flex gap-2 flex-col">
         {" "}
         <div className="flex gap-2 items-center justify-start">
-          <AssetHub className="w-8 h-8" />
+          <NetworkIcon className="w-8 h-8" />
           <h1 className="font-unbounded font-bold text-base text-white">
             {parachain.name}
           </h1>

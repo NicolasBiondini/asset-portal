@@ -15,7 +15,7 @@ import { useUIState } from "@/data/ui/storage";
 
 import { SearchIcon } from "lucide-react";
 
-import { getAssetIcon } from "@/config/icons.config";
+import { getAssetIcon, getNetworkIcon } from "@/config/icons.config";
 import { getNetworkInfo, networkList } from "@/config/networks.config";
 import { Network } from "@/types/networks";
 
@@ -69,7 +69,7 @@ function SelectToNetwork({ children }: Props) {
           <div className="h-[200px] overflow-y-auto flex flex-col w-full">
             {networkList.length > 0 &&
               networkList.map((network) => {
-                const NetworkIcon = getAssetIcon("11111111111");
+                const NetworkIcon = getNetworkIcon(network);
                 const networkInfo = getNetworkInfo(network);
                 return (
                   <Button

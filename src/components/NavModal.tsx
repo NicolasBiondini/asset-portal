@@ -18,6 +18,7 @@ import Link from "next/link";
 import { SUB_MENU_LINKS } from "@/config/constants";
 import SelectNetworkAssetHub from "./modals/SelectNetworkAssetHub";
 import { useRouter } from "next/router";
+import AssetPortal from "./icons/assets/AssetPortal";
 const unbounded = Unbounded({
   subsets: ["latin"],
   variable: "--font-unbounded",
@@ -47,13 +48,9 @@ function NavModal() {
         <SheetHeader className="font-sans w-full flex gap-6 mt-8">
           <SheetTitle>
             <div className="flex font-unbounded items-center gap-1">
-              <AssetHub className="w-6 h-6" />
-              <h1 className="font-bold text-[13px] mt-1">
-                AssetHubHub
-                <span className="text-[8px] font-sans text-colors-pink-dot">
-                  beta
-                </span>
-              </h1>
+              <Link href={"/"}>
+                <AssetPortal className="w-44 h-auto" />
+              </Link>{" "}
             </div>
           </SheetTitle>
           <SheetDescription className="flex flex-col gap-2 font-unbounded justify-between h-full "></SheetDescription>

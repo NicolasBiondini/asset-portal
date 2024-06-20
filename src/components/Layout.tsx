@@ -19,6 +19,7 @@ import { LINKS, SUB_MENU_LINKS } from "@/config/constants";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import SelectNetworkAssetHub from "./modals/SelectNetworkAssetHub";
+import AssetPortal from "./icons/assets/AssetPortal";
 type Props = {
   children: JSX.Element | JSX.Element[];
 };
@@ -57,13 +58,9 @@ function Layout({ children }: Props) {
       <nav className="flex justify-between px-5 items-center h-[120px]  md:h-[70px] sticky top-0 left-0 w-full !bg-background z-10">
         <NavModal />
         <div className="hidden lg:flex font-unbounded items-center gap-2">
-          <AssetHub className="w-8 h-8" />
-          <h1 className="font-bold">
-            AssetHubHub
-            <span className="text-[10px] font-sans text-colors-pink-dot">
-              beta
-            </span>
-          </h1>
+          <Link href={"/"}>
+            <AssetPortal className="w-44 h-auto" />
+          </Link>
         </div>
 
         <div className="flex font-unbounded">
