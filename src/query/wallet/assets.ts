@@ -3,7 +3,7 @@ import { useWalletState } from "@/data/wallet/storage";
 import { useConnection } from "@/hooks/useConnection";
 import { AssetMetadata } from "@/types/asset";
 import { ApiPromise } from "@polkadot/api";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 const fetchAssets = async (api: ApiPromise | null) => {
@@ -41,6 +41,7 @@ const fetchAssets = async (api: ApiPromise | null) => {
 export const useAssets = () => {
   const { setAssetsMetadata, assetsMetadata } = useWalletState();
   const { api } = useConnectionState();
+
   const {
     data: assets,
     error,

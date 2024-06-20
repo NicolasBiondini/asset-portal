@@ -102,23 +102,27 @@ export const useBalances = () => {
     enabled:
       // the storedBalances[address] === undefined prevent refetching, if you want to refetch invalidate the query
       // because each time that the user change his address, this refetch
-      api !== null && address !== "" && storedBalances[address] === undefined,
+      !!api && address !== "",
   });
 
   useEffect(() => {
     if (
       api !== null &&
       assetsMetadata.length > 0 &&
-      address !== "" &&
-      // same here, preventing refetch and using stored values
-      storedBalances[address] === undefined
+      address !== ""
+      // &&
+      // // same here, preventing refetch and using stored values
+      // storedBalances[address] === undefined
     ) {
       refetch();
     }
-  }, [api, refetch, assetsMetadata, address, setLoaded, storedBalances]);
+  }, [api, refetch, assetsMetadata, address, setLoaded]);
 
   useEffect(() => {
+    console.log("NEW:", balances, address);
+
     if (balances !== undefined && Object.keys(balances)?.length > 0) {
+      console.log("NEW:", balances, address);
       setBalances(balances, address);
     }
   }, [balances, setBalances, address]);

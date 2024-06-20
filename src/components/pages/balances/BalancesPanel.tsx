@@ -12,7 +12,7 @@ function BalancesPanel({}: Props) {
   const { balances, address, assetsMetadata: assets } = useWalletState();
 
   return (
-    <section className="flex flex-col gap-8 w-full px-8 lg:px-24 lg:py-14">
+    <section className="flex h-full flex-col gap-8 w-full px-8 lg:px-24 lg:py-14">
       <div className="flex flex-col gap-8 w-full max-w-[1024px] mx-auto">
         <div className="flex flex-col">
           <h1 className="text-colors-pink-dot text-xl font-bold font-unbounded">

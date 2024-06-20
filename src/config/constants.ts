@@ -16,6 +16,7 @@ export const LINKS: {
   socialMedia: {
     [key: string]: string;
   };
+  subscan: string;
 } = {
   wallets: {
     "polkadot-js": "https://polkadot.js.org/extension/",
@@ -26,6 +27,7 @@ export const LINKS: {
     twitter_nachito: "https://x.com/NachitoEth",
     twitter_nicolas: "https://x.com/BiondiniNicolas",
   },
+  subscan: "https://assethub-polkadot.subscan.io/tx/",
 };
 
 export const MENU = [

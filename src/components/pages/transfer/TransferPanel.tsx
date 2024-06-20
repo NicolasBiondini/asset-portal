@@ -13,8 +13,17 @@ import { convertBigInt } from "@/helpers/convertBigInt";
 import { shortenAddress } from "@/helpers/shortenAddress";
 import { cn } from "@/lib/utils";
 import { transfer } from "@/methods";
-import { ArrowBigRightIcon, ChevronDown, Wallet } from "lucide-react";
+import {
+  ArrowBigRightIcon,
+  ChevronDown,
+  ExternalLink,
+  Wallet,
+} from "lucide-react";
 import Skeleton from "./Skeleton";
+import Link from "next/link";
+import { LINKS } from "@/config/constants";
+import { ToastAction } from "@radix-ui/react-toast";
+import { useInvalidate } from "@/query/invalidate";
 
 type Props = {};
 
@@ -34,6 +43,7 @@ function TransferPanel({}: Props) {
     setTransferAmount,
   } = useUIState();
   const { toast } = useToast();
+  const { invalidateBalancesQuery } = useInvalidate();
 
   const AssetIcon = getAssetIcon(tokenId);
   const assetInfo =
@@ -56,6 +66,14 @@ function TransferPanel({}: Props) {
     }
     return true;
   };
+  const handleToast = () => {
+    toast({
+      title: `⌛️ Sending ${tAmount} ${assetInfo && assetInfo.info.symbol}`,
+      description: "Sending, please wait.",
+      variant: "default",
+      duration: 70000000,
+    });
+  };
 
   const handleTransfer = async () => {
     if (api === null || assetApi === null || !assetInfo) return;
@@ -63,10 +81,10 @@ function TransferPanel({}: Props) {
     const amount = convertBigInt(tAmount, Number(assetInfo.info.decimals));
 
     const injector =
-      walletList.length > 0 &&
-      walletList.filter((w) => w.address === address)[0].injected;
+      !!wallet && wallet.address === address ? wallet.injected : false;
     if (!injector) return;
-    const res = await transfer({
+
+    const result = await transfer({
       assetApi,
       sender: {
         address,
@@ -77,18 +95,34 @@ function TransferPanel({}: Props) {
         amount,
         address: toAddress,
       },
+      handleToast,
     });
 
-    if (res.status === "error")
+    if (result.status === "err") {
       return toast({
-        title: "Error sending.",
+        title: "Something went wrong 😔",
+        description:
+          "Something went wrong with your transaction, please try again.",
         variant: "destructive",
       });
-    toast({
-      title: "Successfull sending.",
-      description: `Hash:  ${res.hash}`,
-      variant: "success",
-    });
+    } else {
+      invalidateBalancesQuery([address, toAddress]);
+      toast({
+        title: "Successfull transaction 🎉",
+        description: `You sent ${tAmount} of ${assetInfo.info.symbol}.`,
+        variant: "success",
+        action: (
+          <Link href={`${LINKS.subscan}${result.hash}`} target="_blank">
+            <ToastAction
+              className="bg-colors-bg-light  p-3 rounded-md hover:text-white transition-all hover:bg-colors-grey-line font-unbounded text-sm font-bold"
+              altText="Link"
+            >
+              <ExternalLink className="w-4 h-4" />
+            </ToastAction>
+          </Link>
+        ),
+      });
+    }
   };
 
   return (

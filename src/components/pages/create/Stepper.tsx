@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/stepper";
 import { Button } from "@/components/ui/button";
 import {
+  ExternalLink,
   HandCoins,
   HomeIcon,
   Landmark,
@@ -28,6 +29,9 @@ import Link from "next/link";
 import { useToast } from "@/components/ui/use-toast";
 import { createAsset } from "@/methods";
 import { useConnectionState } from "@/data/connection/storage";
+import { convertBigInt } from "@/helpers/convertBigInt";
+import { LINKS } from "@/config/constants";
+import { ToastAction } from "@/components/ui/toast";
 
 const steps = [
   { label: "Info", icon: PackagePlus },
@@ -160,20 +164,32 @@ const Footer = () => {
   const handleNextStep = async () => {
     if (!isLastStep) return nextStep();
     if (!wallet || api === null) return;
+    toast({
+      title: "Generating asset ⌛️",
+      description: "Loading...",
+      variant: "default",
+      duration: 70000000,
+    });
+    const assetDecimals = Number(decimals.value);
+    const parsedMinBalance = Number(
+      convertBigInt(minBalance.value, assetDecimals)
+    );
+    const parsedAmount = BigInt(
+      convertBigInt(initialMint.value, assetDecimals)
+    );
 
-    // TODO: Parse data here
     const result = await createAsset({
       api,
       sender: { address: wallet.address, injector: wallet.injected },
       handleToast,
       assetInfo: {
-        assetId: 22,
-        admin: "",
-        minBalance: 1000,
-        name: "",
-        symbol: "",
-        decimals: 100,
-        amount: BigInt(100),
+        assetId: Number(assetId.value),
+        admin: wallet.address,
+        minBalance: parsedMinBalance,
+        name: name.value,
+        symbol: symbol.value,
+        decimals: assetDecimals,
+        amount: parsedAmount,
       },
     });
     if (result.status === "err") {
@@ -184,12 +200,22 @@ const Footer = () => {
         variant: "destructive",
       });
     } else {
-      // TODO: SUBSCAN LINK HERE
       toast({
         title: "Asset created sussefully 🚀",
         description: "Congrats! Your asset was created! 🎉",
         variant: "success",
+        action: (
+          <Link href={`${LINKS.subscan}${result.hash}`} target="_blank">
+            <ToastAction
+              className="bg-colors-bg-light  p-3 rounded-md hover:text-white transition-all hover:bg-colors-grey-line font-unbounded text-sm font-bold"
+              altText="Link"
+            >
+              <ExternalLink className="w-4 h-4" />
+            </ToastAction>
+          </Link>
+        ),
       });
+      // TODO: Invalidate queries
       return nextStep();
     }
   };

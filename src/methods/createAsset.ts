@@ -56,12 +56,10 @@ export const createAsset = async ({
             console.log(
               `Batch transaction included at blockHash ${result.status.asInBlock}`
             );
-            // TODO: add toast here for in block status
           } else if (result.status.isFinalized) {
             console.log(
               `Batch transaction finalized at blockHash ${result.status.asFinalized}`
             );
-            // TODO: add toast here for finalized status
 
             // Check for errors in the events
             const allEvents = result.events;
@@ -71,10 +69,9 @@ export const createAsset = async ({
               if (section === "system" && method === "ExtrinsicFailed") {
                 extrinsicFailed = true;
                 console.error("Extrinsic failed");
-                // TODO: add toast here for extrinsic failed
                 resolve({
                   status: "err",
-                  hash: result.status.asFinalized.toString(),
+                  hash: result.txHash.toString(),
                 });
               }
             });
@@ -82,7 +79,7 @@ export const createAsset = async ({
             if (!extrinsicFailed) {
               resolve({
                 status: "ok",
-                hash: result.status.asFinalized.toString(),
+                hash: result.txHash.toString(),
               });
             }
 
@@ -92,36 +89,10 @@ export const createAsset = async ({
       );
     } catch (error) {
       console.log(error);
-      // TODO: add toast here for error status
-      reject({
+      resolve({
         status: "err",
         hash: "unknown",
       });
     }
   });
-
-  // try {
-  //   const unsub = await batchTx.signAndSend(
-  //     sender.address,
-  //     {
-  //       signer: sender.injector.signer,
-  //     },
-  //     (result) => {
-  //       console.log(`Current status: ${result.status}`);
-
-  //       if (result.status.isInBlock) {
-  //         console.log(
-  //           `Batch transaction included at blockHash ${result.status.asInBlock}`
-  //         );
-  //       } else if (result.status.isFinalized) {
-  //         console.log(
-  //           `Batch transaction finalized at blockHash ${result.status.asFinalized}`
-  //         );
-  //         unsub();
-  //       }
-  //     }
-  //   );
-  // } catch (error) {
-  //   console.log(error);
-  // }
 };
