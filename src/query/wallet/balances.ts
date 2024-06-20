@@ -97,12 +97,12 @@ export const useBalances = () => {
     isSuccess,
     refetch,
   } = useQuery({
-    queryKey: ["user", address, "balances"],
+    queryKey: ["balances", { address }],
     queryFn: () => fetchBalances(api, address, assetsMetadata),
-    enabled:
-      // the storedBalances[address] === undefined prevent refetching, if you want to refetch invalidate the query
-      // because each time that the user change his address, this refetch
-      !!api && address !== "",
+    // enabled:
+    //   // the storedBalances[address] === undefined prevent refetching, if you want to refetch invalidate the query
+    //   // because each time that the user change his address, this refetch
+    //   !!api && address !== "",
   });
 
   useEffect(() => {
