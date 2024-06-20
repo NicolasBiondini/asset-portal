@@ -1,24 +1,42 @@
-import Image from "next/image";
 import React from "react";
-import TalismanImage from "./assets/TalismanImage.png";
-import { cn } from "@/lib/utils";
 
-type Props = {
-  className?: string;
-};
-
-function TalismanIcon({ className }: Props) {
+function TalismanIcon({ className }: { className: string }) {
   return (
-    <div className={cn(className, "relative")}>
-      <Image
-        src={TalismanImage}
-        className="object-cover"
-        alt="Talisman Icon png"
-        fill
-        priority
-        sizes="16px 16px"
-      />
-    </div>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="64"
+      height="64"
+      fill="none"
+      viewBox="0 0 64 64"
+      className={className}
+    >
+      <path
+        fill="#fd4848"
+        fillRule="evenodd"
+        d="M50.116 35.663c.608 1.324 2.399 1.792 3.43.762l1.889-1.89a5 5 0 017.071 7.071L47.234 56.878C43.565 61.233 38.07 64 31.93 64c-6.403 0-12.103-3.009-15.764-7.69L1.464 41.607a5 5 0 117.071-7.071l1.861 1.861c1.008 1.008 2.758.554 3.353-.74a1.94 1.94 0 00.182-.813V12a5 5 0 0110 0v11.556c0 .995 1.019 1.67 1.967 1.37.6-.19 1.033-.736 1.033-1.365V5a5 5 0 1110 0v18.561c0 .63.434 1.176 1.034 1.365.948.3 1.966-.375 1.966-1.37V12a5 5 0 1110 0v22.835c0 .287.065.567.185.828z"
+        clipRule="evenodd"
+      ></path>
+      <path
+        fill="#d5ff5c"
+        d="M47.932 46s-7.164 10-16 10c-8.837 0-16-10-16-10s7.163-10 16-10c8.836 0 16 10 16 10z"
+      ></path>
+      <g stroke="#fd4848" strokeWidth="1.001">
+        <path d="M39.431 46a7.5 7.5 0 11-14.999 0 7.5 7.5 0 0115 0z"></path>
+        <path d="M36.431 46a4.5 4.5 0 11-8.999 0 4.5 4.5 0 019 0z"></path>
+        <path d="M42.431 46c0 5.799-4.7 10.5-10.5 10.5-5.798 0-10.499-4.701-10.499-10.5s4.7-10.5 10.5-10.5c5.798 0 10.5 4.701 10.5 10.5z"></path>
+        <path d="M45.431 46c0 7.456-6.044 13.5-13.5 13.5-7.455 0-13.499-6.044-13.499-13.5s6.044-13.5 13.5-13.5c7.455 0 13.5 6.044 13.5 13.5z"></path>
+        <path
+          fill="#162beb"
+          d="M33.431 46a1.5 1.5 0 11-2.999 0 1.5 1.5 0 013 0z"
+        ></path>
+      </g>
+      <ellipse cx="31.932" cy="46" fill="#fd4848" rx="2" ry="2"></ellipse>
+      <path
+        stroke="#d5ff5c"
+        strokeWidth="1.001"
+        d="M16.652 46.122a18.154 18.154 0 01-.095-.122l.095-.122c.208-.268.517-.652.916-1.114a33.177 33.177 0 013.377-3.385c2.865-2.474 6.75-4.879 10.987-4.879s8.122 2.405 10.987 4.879a33.198 33.198 0 014.293 4.499l.095.122-.095.122a33.198 33.198 0 01-4.294 4.5c-2.865 2.473-6.75 4.878-10.986 4.878-4.237 0-8.122-2.405-10.987-4.879a33.177 33.177 0 01-4.293-4.499z"
+      ></path>
+    </svg>
   );
 }
 
