@@ -18,7 +18,7 @@ const fetchAssets = async (api: ApiPromise | null) => {
           info: token[1].toHuman() as {
             decimals: string;
             deposit: string;
-            isFrozen: false;
+            isFrozen: boolean;
             name: string;
             symbol: string;
           },

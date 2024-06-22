@@ -112,7 +112,7 @@ function TransferPanel({}: Props) {
         description: `You sent ${tAmount} of ${assetInfo.info.symbol}.`,
         variant: "success",
         action: (
-          <Link href={`${LINKS.subscan}${result.hash}`} target="_blank">
+          <Link href={`${LINKS.subscan}/tx/${result.hash}`} target="_blank">
             <ToastAction
               className="bg-colors-bg-light  p-3 rounded-md hover:text-white transition-all hover:bg-colors-grey-line font-unbounded text-sm font-bold"
               altText="Link"

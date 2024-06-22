@@ -1,5 +1,5 @@
 import { useWalletState } from "@/data/wallet/storage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SearchIcon } from "lucide-react";
 import { Input } from "../../ui/input";
 import Skeleton from "./Skeleton";
@@ -13,6 +13,10 @@ function BalancesPanel({}: Props) {
   const [onlyBalance, setOnlyBalance] = useState(false);
   const [search, setSearch] = useState("");
   const { balances, address, assetsMetadata: assets } = useWalletState();
+
+  useEffect(() => {
+    console.log("ASSETS: ", assets);
+  });
 
   return (
     <section className="flex h-full flex-col gap-8 w-full px-8 lg:px-24 lg:py-14">
@@ -42,14 +46,17 @@ function BalancesPanel({}: Props) {
           />
         </div>
         <div className="flex flex-col gap-2 w-full ">
-          <div className="w-full flex justify-end py-4 items-center gap-2">
-            <Switch
-              className="w-7 h-4"
-              checked={onlyBalance}
-              onCheckedChange={() => setOnlyBalance(!onlyBalance)}
-            />
-            <p className="text-xs">Hide empty balances</p>
-          </div>
+          {address && (
+            <div className="w-full flex justify-end py-4 items-center gap-2">
+              <Switch
+                className="w-7 h-4"
+                checked={onlyBalance}
+                onCheckedChange={() => setOnlyBalance(!onlyBalance)}
+              />
+              <p className="text-xs">Hide empty balances</p>
+            </div>
+          )}
+
           <div className="flex justify-between font-bold px-4 text-colors-font-seconday">
             <p>Asset</p>
             <p>Balance</p>

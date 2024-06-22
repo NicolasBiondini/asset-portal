@@ -2,6 +2,8 @@ import Tooltip from "@/components/Tooltip";
 import { Badge } from "@/components/ui/badge";
 import { getAssetIcon } from "@/config/icons.config";
 import { useWalletState } from "@/data/wallet/storage";
+import { Info } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
 type Props = {
@@ -25,27 +27,32 @@ function AssetCard({ id, symbol, name }: Props) {
           </Badge>
         </Tooltip>
       </div>
-      {address !== "" ? (
-        loaded && !!balances[address] ? (
-          <p className="text-white font-bold ">
-            {balances[address][id] || "0"}{" "}
+      <div className="flex  gap-2 items-center">
+        <Link href={`/asset/${id}`}>
+          <Info className="w-4 h-4 text-colors-pink-dot hover:text-colors-pink-secondary transition-all" />
+        </Link>
+        {address !== "" ? (
+          loaded && !!balances[address] ? (
+            <p className="text-white font-bold ">
+              {balances[address][id] || "0"}{" "}
+              <span className="text-[10px] font-light text-colors-font-primary">
+                {symbol}
+              </span>
+            </p>
+          ) : (
+            <div className="animate-pulse">
+              <div className="h-6 bg-colors-grey-line rounded-md w-[70px]"></div>
+            </div>
+          )
+        ) : (
+          <p className="text-white font-bold">
+            0{" "}
             <span className="text-[10px] font-light text-colors-font-primary">
               {symbol}
             </span>
           </p>
-        ) : (
-          <div className="animate-pulse">
-            <div className="h-6 bg-colors-grey-line rounded-md w-[70px]"></div>
-          </div>
-        )
-      ) : (
-        <p className="text-white font-bold">
-          0{" "}
-          <span className="text-[10px] font-light text-colors-font-primary">
-            {symbol}
-          </span>
-        </p>
-      )}
+        )}
+      </div>
     </div>
   );
 }

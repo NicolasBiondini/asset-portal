@@ -27,7 +27,7 @@ export const LINKS: {
     twitter_nachito: "https://x.com/NachitoEth",
     twitter_nicolas: "https://x.com/BiondiniNicolas",
   },
-  subscan: "https://assethub-polkadot.subscan.io/tx/",
+  subscan: "https://assethub-polkadot.subscan.io",
 };
 
 export const MENU = [
