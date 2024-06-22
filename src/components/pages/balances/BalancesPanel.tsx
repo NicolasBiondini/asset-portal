@@ -4,10 +4,13 @@ import { SearchIcon } from "lucide-react";
 import { Input } from "../../ui/input";
 import Skeleton from "./Skeleton";
 import AssetCard from "./AssetCard";
+import { mainAssets } from "@/config/assets.config";
+import { Switch } from "@/components/ui/switch";
 
 type Props = {};
 
 function BalancesPanel({}: Props) {
+  const [onlyBalance, setOnlyBalance] = useState(false);
   const [search, setSearch] = useState("");
   const { balances, address, assetsMetadata: assets } = useWalletState();
 
@@ -39,6 +42,14 @@ function BalancesPanel({}: Props) {
           />
         </div>
         <div className="flex flex-col gap-2 w-full ">
+          <div className="w-full flex justify-end py-4 items-center gap-2">
+            <Switch
+              className="w-7 h-4"
+              checked={onlyBalance}
+              onCheckedChange={() => setOnlyBalance(!onlyBalance)}
+            />
+            <p className="text-xs">Hide empty balances</p>
+          </div>
           <div className="flex justify-between font-bold px-4 text-colors-font-seconday">
             <p>Asset</p>
             <p>Balance</p>
@@ -48,6 +59,9 @@ function BalancesPanel({}: Props) {
               <Skeleton />
             ) : (
               assets
+                .filter((asset) =>
+                  onlyBalance ? Number(balances[address][asset.id]) > 0 : true
+                )
                 .filter(
                   // Search asset
                   (asset) =>
@@ -58,13 +72,19 @@ function BalancesPanel({}: Props) {
                     asset.info.name.toLowerCase().includes(search.toLowerCase())
                 )
                 .sort((a, b) => {
-                  // Sort by id
                   if (a.id === "DOT") return -1;
                   if (b.id === "DOT") return 1;
-                  const numA = parseInt(a.id, 10);
-                  const numB = parseInt(b.id, 10);
 
-                  return numA - numB;
+                  const aIsMainAsset = mainAssets.includes(a.id);
+                  const bIsMainAsset = mainAssets.includes(b.id);
+
+                  if (aIsMainAsset && !bIsMainAsset) {
+                    return -1;
+                  } else if (!aIsMainAsset && bIsMainAsset) {
+                    return 1;
+                  } else {
+                    return 0;
+                  }
                 })
                 .sort((a, b) => {
                   const balanceA = balances[address]

@@ -121,9 +121,9 @@ export const useBalances = () => {
   useEffect(() => {
     console.log("NEW:", balances, address);
 
-    if (balances !== undefined && Object.keys(balances)?.length > 0) {
+    if (api && balances !== undefined && Object.keys(balances)?.length > 0) {
       console.log("NEW:", balances, address);
       setBalances(balances, address);
     }
-  }, [balances, setBalances, address]);
+  }, [balances, setBalances, address, api]);
 };
