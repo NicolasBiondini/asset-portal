@@ -1,5 +1,6 @@
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -25,20 +26,12 @@ const unbounded = Unbounded({
   weight: ["400", "700"],
 });
 function NavModal() {
-  const [open, setOpen] = useState(false);
   const { mode } = useUIState();
   const rourter = useRouter();
 
-  const handleClose = () => {
-    setOpen(!open);
-  };
-
   return (
-    <Sheet open={open}>
-      <SheetTrigger
-        onClick={handleClose}
-        className="flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 lg:hidden bg-transparent text-card-foreground hover:scale-[102%] transition-all hover:bg-card h-10 w-10"
-      >
+    <Sheet>
+      <SheetTrigger className="flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 lg:hidden bg-transparent text-card-foreground hover:scale-[102%] transition-all hover:bg-card h-10 w-10">
         <MenuIcon className="w-4 h-4 " />
       </SheetTrigger>
       <SheetContent
@@ -55,8 +48,8 @@ function NavModal() {
           </SheetTitle>
           <SheetDescription className="flex flex-col gap-2 font-unbounded justify-between h-full "></SheetDescription>
         </SheetHeader>
-        <nav className="flex flex-col gap-2 h-[85%] justify-between text-colors-font-seconday font-unbounded">
-          <Menu type="mobile" handleClose={handleClose} />
+        <nav className="flex flex-col gap-2 h-[85%] pt-2 pb-10 justify-between text-colors-font-seconday font-unbounded">
+          <Menu type="mobile" />
           <div className="flex w-full gap-6 flex-col">
             <div className="flex flex-col gap-2">
               <SelectNetworkAssetHub>
@@ -92,21 +85,20 @@ function NavModal() {
                   <p> About us</p>
                 </Button>
               </Link>
-            </div>
-
-            <div className="flex gap-2 w-full">
-              {SUB_MENU_LINKS.map((link) => {
-                return (
-                  <Link
-                    key={link.name}
-                    href={link.link}
-                    className="group"
-                    target="_blank"
-                  >
-                    <link.Icon className="w-5 h-5 group-hover:text-white transition-all" />
-                  </Link>
-                );
-              })}
+              <div className="flex gap-2 h-full w-full">
+                {SUB_MENU_LINKS.map((link) => {
+                  return (
+                    <Link
+                      key={link.name}
+                      href={link.link}
+                      className="group"
+                      target="_blank"
+                    >
+                      <link.Icon className="w-5 h-5 group-hover:text-white transition-all" />
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </nav>

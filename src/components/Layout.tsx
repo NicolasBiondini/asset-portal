@@ -109,7 +109,7 @@ function Layout({ children }: Props) {
         </div>
       </nav>
       <div className="flex flex-grow relative">
-        <div className="w-[250px] px-6 hidden lg:flex flex-col gap-2 h-[87%] justify-between font-unbounded fixed top-20">
+        <div className="w-[250px] px-6 pt-4 hidden lg:flex flex-col gap-2 h-[87%] justify-between font-unbounded fixed top-20">
           <Menu />
           <div className="flex w-full gap-6 flex-col">
             <div className="flex flex-col gap-2">
