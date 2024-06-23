@@ -14,10 +14,6 @@ function BalancesPanel({}: Props) {
   const [search, setSearch] = useState("");
   const { balances, address, assetsMetadata: assets } = useWalletState();
 
-  useEffect(() => {
-    console.log("ASSETS: ", assets);
-  });
-
   return (
     <section className="flex h-full flex-col gap-8 w-full px-8 lg:px-24 lg:py-14">
       <div className="flex flex-col gap-8 w-full max-w-[1024px] mx-auto">

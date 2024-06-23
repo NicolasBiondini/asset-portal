@@ -5,11 +5,13 @@ import { getAssetIdInfo } from "@/config/assetId.config";
 import { LINKS } from "@/config/constants";
 import { getAssetIcon } from "@/config/icons.config";
 import { useWalletState } from "@/data/wallet/storage";
+import { parseNumber } from "@/helpers/parseNumber";
 import { shortenAddress } from "@/helpers/shortenAddress";
 import { useAssetInfo } from "@/query/assetId/assetInfo";
 import { AssetMetadata } from "@/types/asset";
 import { Globe, Twitter } from "lucide-react";
 import Link from "next/link";
+import { parse } from "path";
 import React, { useEffect } from "react";
 
 type Props = {
@@ -173,7 +175,9 @@ function AssetPanel({ asset }: Props) {
                         Holders:
                       </p>
                       <p className="font-bold text-white">
-                        {assetInfo.accounts ? assetInfo.accounts : "-"}
+                        {assetInfo.accounts
+                          ? parseNumber(assetInfo.accounts)
+                          : "-"}
                       </p>
                     </div>
                     <div className="flex justify-between">
@@ -181,7 +185,9 @@ function AssetPanel({ asset }: Props) {
                         Supply:
                       </p>
                       <p className="font-bold text-white flex gap-1 items-baseline">
-                        {assetInfo.supply ? assetInfo.supply : "-"}
+                        {assetInfo.supply
+                          ? parseNumber(assetInfo.supply, Number(decimals))
+                          : "-"}
                         <span className="text-[10px] text-colors-font-seconday">
                           {symbol}
                         </span>
@@ -199,7 +205,7 @@ function AssetPanel({ asset }: Props) {
             <div className="flex h-full w-full justify-center items-center">
               <p className="text-white font-bold flex gap-1 items-baseline text-6xl">
                 {!!address && balances[address] && balances[address][assetId]
-                  ? balances[address][assetId]
+                  ? parseNumber(balances[address][assetId])
                   : "0.00"}{" "}
                 <span className="text-sm text-colors-font-seconday">
                   {symbol}

@@ -2,6 +2,7 @@ import Tooltip from "@/components/Tooltip";
 import { Badge } from "@/components/ui/badge";
 import { getAssetIcon } from "@/config/icons.config";
 import { useWalletState } from "@/data/wallet/storage";
+import { parseNumber } from "@/helpers/parseNumber";
 import { Info } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -34,7 +35,7 @@ function AssetCard({ id, symbol, name }: Props) {
         {address !== "" ? (
           loaded && !!balances[address] ? (
             <p className="text-white font-bold ">
-              {balances[address][id] || "0"}{" "}
+              {parseNumber(balances[address][id]) || "0"}{" "}
               <span className="text-[10px] font-light text-colors-font-primary">
                 {symbol}
               </span>
