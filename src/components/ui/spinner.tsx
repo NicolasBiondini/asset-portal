@@ -15,7 +15,7 @@ function Spinner({ className }: Props) {
         xmlns="http://www.w3.org/2000/svg"
         className={cn(
           "w-8 h-8 text-gray-200 animate-spin dark:text-colors-grey-line fill-colors-pink-dot",
-          { className }
+          className
         )}
       >
         <path

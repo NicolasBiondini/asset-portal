@@ -24,6 +24,8 @@ import Link from "next/link";
 import { LINKS } from "@/config/constants";
 import { ToastAction } from "@radix-ui/react-toast";
 import { useInvalidate } from "@/query/invalidate";
+import { useState } from "react";
+import Spinner from "@/components/ui/spinner";
 
 type Props = {};
 
@@ -44,6 +46,7 @@ function TransferPanel({}: Props) {
   } = useUIState();
   const { toast } = useToast();
   const { invalidateBalancesQuery } = useInvalidate();
+  const [sending, setSending] = useState(false);
 
   const AssetIcon = getAssetIcon(tokenId);
   const assetInfo =
@@ -54,6 +57,7 @@ function TransferPanel({}: Props) {
   const Icon = !!isWallet && getWalletCopy.getIcon(isWallet.walletId);
 
   const getDisabled = () => {
+    if (sending) return true;
     if (api === null || assetApi === null || tAmount === "" || tokenId === "")
       return true;
     if (balances[address]) {
@@ -84,6 +88,8 @@ function TransferPanel({}: Props) {
       !!wallet && wallet.address === address ? wallet.injected : false;
     if (!injector) return;
 
+    setSending(true);
+
     const result = await transfer({
       assetApi,
       sender: {
@@ -100,6 +106,8 @@ function TransferPanel({}: Props) {
     });
 
     if (result.status === "err") {
+      setSending(false);
+
       return toast({
         title: "Something went wrong 😔",
         description:
@@ -107,6 +115,7 @@ function TransferPanel({}: Props) {
         variant: "destructive",
       });
     } else {
+      setSending(false);
       invalidateBalancesQuery();
       toast({
         title: "Successfull transaction 🎉",
@@ -218,7 +227,11 @@ function TransferPanel({}: Props) {
               disabled={getDisabled()}
               type="button"
             >
-              Transfer
+              {sending ? (
+                <Spinner className="!fill-white w-6 h-6" />
+              ) : (
+                <p>Transfer</p>
+              )}
             </Button>
           ) : (
             <AddAddressModal>

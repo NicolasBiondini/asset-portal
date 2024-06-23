@@ -27,6 +27,7 @@ import { useInvalidate } from "@/query/invalidate";
 import Link from "next/link";
 import { LINKS } from "@/config/constants";
 import { ToastAction } from "@radix-ui/react-toast";
+import Spinner from "@/components/ui/spinner";
 
 type Props = {};
 
@@ -50,6 +51,7 @@ function TeleportPanel({}: Props) {
     setTeleportAddress,
   } = useUIState();
   const { toast } = useToast();
+  const [sending, setSending] = useState(false);
 
   const NetworkIcon = getNetworkIcon(parachainId);
 
@@ -68,6 +70,7 @@ function TeleportPanel({}: Props) {
   const Icon = !!isWallet && getWalletCopy.getIcon(isWallet.walletId);
 
   const getDisabled = () => {
+    if (sending) return true;
     if (api === null || assetApi === null || tAmount === "" || tokenId === "")
       return true;
     if (balances[address]) {
@@ -97,6 +100,7 @@ function TeleportPanel({}: Props) {
     const injector =
       !!wallet && wallet.address === address ? wallet.injected : false;
     if (!injector) return;
+    setSending(true);
 
     const result = await transfer({
       assetApi,
@@ -117,6 +121,8 @@ function TeleportPanel({}: Props) {
       safeXcmVersion,
     });
     if (result.status === "err") {
+      setSending(false);
+
       return toast({
         title: "Something went wrong 😔",
         description:
@@ -124,6 +130,8 @@ function TeleportPanel({}: Props) {
         variant: "destructive",
       });
     } else {
+      setSending(false);
+
       invalidateBalancesQuery();
       toast({
         title: "Successfull teleporting 🎉",
@@ -303,7 +311,11 @@ function TeleportPanel({}: Props) {
                   disabled={getDisabled()}
                   type="button"
                 >
-                  Transfer
+                  {sending ? (
+                    <Spinner className="!fill-white w-6 h-6" />
+                  ) : (
+                    <p>Transfer</p>
+                  )}{" "}
                 </Button>
               ) : (
                 <AddAddressModal>

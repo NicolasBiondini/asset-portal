@@ -13,7 +13,7 @@ import {
   PackagePlus,
   Wallet,
 } from "lucide-react";
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useWalletState } from "@/data/wallet/storage";
 import AddAddressModal from "@/components/modals/AddAddressModal";
 import { Input } from "@/components/ui/input";
@@ -33,6 +33,7 @@ import { convertBigInt } from "@/helpers/convertBigInt";
 import { LINKS } from "@/config/constants";
 import { ToastAction } from "@/components/ui/toast";
 import { useInvalidate } from "@/query/invalidate";
+import Spinner from "@/components/ui/spinner";
 
 const steps = [
   { label: "Info", icon: PackagePlus },
@@ -128,6 +129,7 @@ const Footer = () => {
       create: { name, symbol, assetId, decimals, minBalance, initialMint },
     },
   } = useUIState();
+  const [sending, setSending] = useState(false);
 
   const getDisabled = () => {
     if (currentStep.label === "Info") {
@@ -152,6 +154,7 @@ const Footer = () => {
         return false;
       return true;
     } else if (currentStep.label === "Mint") {
+      if (sending) return true;
       if (initialMint.value !== "" && initialMint.err === "") return false;
       return true;
     }
@@ -166,6 +169,7 @@ const Footer = () => {
   const handleNextStep = async () => {
     if (!isLastStep) return nextStep();
     if (!wallet || api === null) return;
+    setSending(true);
     toast({
       title: "Generating asset ⌛️",
       description: "Loading...",
@@ -195,6 +199,7 @@ const Footer = () => {
       },
     });
     if (result.status === "err") {
+      setSending(false);
       return toast({
         title: "Something went wrong 😔",
         description:
@@ -202,6 +207,7 @@ const Footer = () => {
         variant: "destructive",
       });
     } else {
+      setSending(false);
       invalidateAssetsQuery();
       invalidateBalancesQuery();
       toast({
@@ -219,7 +225,6 @@ const Footer = () => {
           </Link>
         ),
       });
-      // TODO: Invalidate queries
       return nextStep();
     }
   };
@@ -267,15 +272,21 @@ const Footer = () => {
             </Button>
             <Button
               size="sm"
-              className="font-unbounded font-bold text-xs hover:scale-[102%] transition-all"
+              className="font-unbounded font-bold text-xs hover:scale-[102%] transition-all w-[170px]"
               onClick={handleNextStep}
               disabled={getDisabled()}
             >
-              {isLastStep
-                ? "Create and Mint 🎉"
-                : isOptionalStep
-                ? "Skip"
-                : "Next"}
+              {isLastStep ? (
+                sending ? (
+                  <Spinner className="!fill-white w-4 h-4" />
+                ) : (
+                  "Create and Mint 🎉"
+                )
+              ) : isOptionalStep ? (
+                "Skip"
+              ) : (
+                "Next"
+              )}
             </Button>
           </>
         )}
