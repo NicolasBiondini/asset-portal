@@ -47,7 +47,7 @@ function ConnectWalletButton({ handleClose }: Props) {
         injected: injectedExtension,
       });
       toast({
-        title: "Wallet connected sussesfully 🎉.",
+        title: "Wallet connected successfully 🎉.",
         variant: "success",
       });
       handleClose();

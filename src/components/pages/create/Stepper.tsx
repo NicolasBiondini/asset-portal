@@ -211,7 +211,7 @@ const Footer = () => {
       invalidateAssetsQuery();
       invalidateBalancesQuery();
       toast({
-        title: "Asset created sussefully 🚀",
+        title: "Asset created successfully 🚀",
         description: "Congrats! Your asset was created! 🎉",
         variant: "success",
         action: (
