@@ -1,11 +1,13 @@
 import { AssetTransferApi } from "@substrate/asset-transfer-api";
 import { Sender, TxInfo } from "@/types/transfer";
+import { parseAddress } from "@/helpers/parseAddress";
 
 export const transfer = async ({
   assetApi,
   sender,
   txInfo,
   parachainId = "1000",
+  safeXcmVersion,
   handleToast,
 }: {
   assetApi: AssetTransferApi;
@@ -13,19 +15,21 @@ export const transfer = async ({
   txInfo: TxInfo;
   parachainId?: string;
   handleToast: () => void;
+  safeXcmVersion: number;
 }): Promise<{ status: "ok" | "err"; hash: string }> => {
   try {
+    console.log(parachainId, parseAddress(txInfo.address), [txInfo.tokenId]);
     const extrinsic = await assetApi.createTransferTransaction(
       // 1000 assethub parachain id
       parachainId,
       // to address
-      txInfo.address,
+      parseAddress(txInfo.address),
       // asset
       [txInfo.tokenId],
       // asset amount
       [txInfo.amount],
       // config, where submittable is to be able to signAndSend
-      { format: "submittable", keepAlive: false }
+      { format: "submittable", keepAlive: false, xcmVersion: safeXcmVersion }
     );
     return new Promise(async (resolve, reject) => {
       let flag = true;

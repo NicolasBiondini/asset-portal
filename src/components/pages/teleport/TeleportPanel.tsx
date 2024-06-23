@@ -10,7 +10,7 @@ import { parseAddress } from "@/helpers/parseAddress";
 import { transfer } from "@/methods";
 import { Skeleton } from "./Skeleton";
 import AddAddressModal from "@/components/modals/AddAddressModal";
-import { ChevronDown, Info, Wallet } from "lucide-react";
+import { ChevronDown, ExternalLink, Info, Wallet } from "lucide-react";
 import { shortenAddress } from "@/helpers/shortenAddress";
 import { getWalletCopy } from "@/config/wallets.config";
 import SelectAddress from "@/components/modals/transfer/SelectAddress";
@@ -23,12 +23,18 @@ import { useEffect, useState } from "react";
 import Tooltip from "@/components/Tooltip";
 import { getNetworkInfo } from "@/config/networks.config";
 import SelectToNetwork from "@/components/modals/teleport/SelectToNetwork";
+import { useInvalidate } from "@/query/invalidate";
+import Link from "next/link";
+import { LINKS } from "@/config/constants";
+import { ToastAction } from "@radix-ui/react-toast";
 
 type Props = {};
 
 function TeleportPanel({}: Props) {
   const [checked, setChecked] = useState(false);
-  const { api, assetApi } = useConnectionState();
+  const { api, assetApi, safeXcmVersion } = useConnectionState();
+  const { invalidateBalancesQuery } = useInvalidate();
+
   const {
     address,
     wallet,
@@ -54,7 +60,10 @@ function TeleportPanel({}: Props) {
   const networkInfo = getNetworkInfo(parachainId);
 
   // Check if it's wallet to get wallet Icon
-  const isWallet = wallet?.address === address ? wallet : false;
+  const isWallet =
+    toAddress !== "" && wallet?.address === parseAddress(toAddress)
+      ? wallet
+      : false;
 
   const Icon = !!isWallet && getWalletCopy.getIcon(isWallet.walletId);
 
@@ -72,14 +81,24 @@ function TeleportPanel({}: Props) {
     }
     return true;
   };
+  const handleToast = () => {
+    toast({
+      title: `⌛️ Teleporting ${tAmount} ${assetInfo && assetInfo.info.symbol}`,
+      description: `Teleporting to ${networkInfo.name}, please wait.`,
+      variant: "default",
+      duration: 70000000,
+    });
+  };
 
   const handleTransfer = async () => {
     if (api === null || assetApi === null || !assetInfo || !address) return;
     const amount = convertBigInt(tAmount, Number(assetInfo.info.decimals));
 
-    const injector = walletList.filter((w) => w.address === address)[0]
-      .injected;
-    const res = await transfer({
+    const injector =
+      !!wallet && wallet.address === address ? wallet.injected : false;
+    if (!injector) return;
+
+    const result = await transfer({
       assetApi,
       sender: {
         address,
@@ -94,24 +113,40 @@ function TeleportPanel({}: Props) {
             : toAddress,
       },
       parachainId: networkInfo.id,
+      handleToast,
+      safeXcmVersion,
     });
-    if (res.status === "error")
+    if (result.status === "err") {
       return toast({
-        title: "Error sending.",
+        title: "Something went wrong 😔",
+        description:
+          "Something went wrong with your transaction, please try again.",
         variant: "destructive",
       });
-    toast({
-      title: "Successfull sending.",
-      description: `Hash:  ${res.hash}`,
-      variant: "success",
-    });
+    } else {
+      invalidateBalancesQuery();
+      toast({
+        title: "Successfull teleporting 🎉",
+        description: `You sent ${tAmount} of ${assetInfo.info.symbol} to ${networkInfo.name}.`,
+        variant: "success",
+        action: (
+          <Link href={`${LINKS.subscan}/tx/${result.hash}`} target="_blank">
+            <ToastAction
+              className="bg-colors-bg-light  p-3 rounded-md hover:text-white transition-all hover:bg-colors-grey-line font-unbounded text-sm font-bold"
+              altText="Link"
+            >
+              <ExternalLink className="w-4 h-4" />
+            </ToastAction>
+          </Link>
+        ),
+      });
+    }
   };
 
   // To parse address when the user change selected network
   useEffect(() => {
     if (toAddress === "" || !checked) return;
     if (toAddress === parseAddress(toAddress, networkInfo.prefix)) return;
-    console.log("changed:", parseAddress(toAddress, networkInfo.prefix));
     setTeleportAddress(parseAddress(toAddress, networkInfo.prefix));
   }, [parachainId, toAddress, networkInfo.prefix, setTeleportAddress, checked]);
 

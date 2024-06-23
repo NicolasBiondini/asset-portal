@@ -13,4 +13,7 @@ export const useConnectionState = create<ConnectionState>()((set) => ({
   setAssetApi: (assetApi) => {
     set((state) => ({ ...state, assetApi }));
   },
+  setSafeXcmVersion: (safeXcmVersion) => {
+    set((state) => ({ ...state, safeXcmVersion }));
+  },
 }));

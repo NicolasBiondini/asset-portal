@@ -5,6 +5,7 @@ import { encodeAddress, decodeAddress } from "@polkadot/util-crypto";
 // prefix = 0 default (assetHub prefix)
 
 export function parseAddress(address: string, prefix: number = 0): string {
+  if (address === "") return "";
   const decodedAddress = decodeAddress(address);
 
   return encodeAddress(decodedAddress, prefix);

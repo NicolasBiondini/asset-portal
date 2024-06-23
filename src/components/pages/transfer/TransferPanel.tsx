@@ -28,7 +28,7 @@ import { useInvalidate } from "@/query/invalidate";
 type Props = {};
 
 function TransferPanel({}: Props) {
-  const { api, assetApi } = useConnectionState();
+  const { api, assetApi, safeXcmVersion } = useConnectionState();
   const {
     address,
     wallet,
@@ -96,6 +96,7 @@ function TransferPanel({}: Props) {
         address: toAddress,
       },
       handleToast,
+      safeXcmVersion,
     });
 
     if (result.status === "err") {
