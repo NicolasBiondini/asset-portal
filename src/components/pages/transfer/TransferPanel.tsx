@@ -53,7 +53,7 @@ function TransferPanel({}: Props) {
     assets.length > 0 && assets.filter((asset) => asset.id === tokenId)[0];
 
   // Check if it's wallet to get wallet Icon
-  const isWallet = wallet?.address === address ? wallet : false;
+  const isWallet = wallet?.address === toAddress ? wallet : false;
   const Icon = !!isWallet && getWalletCopy.getIcon(isWallet.walletId);
 
   const getDisabled = () => {
