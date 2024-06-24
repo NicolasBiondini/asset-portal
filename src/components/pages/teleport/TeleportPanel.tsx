@@ -132,7 +132,7 @@ function TeleportPanel({}: Props) {
     } else {
       setSending(false);
 
-      invalidateBalancesQuery();
+      invalidateBalancesQuery(address);
       toast({
         title: "Successfull teleporting 🎉",
         description: `You sent ${tAmount} of ${assetInfo.info.symbol} to ${networkInfo.name}.`,

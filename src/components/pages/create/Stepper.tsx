@@ -111,7 +111,7 @@ export default function StepperCreateAsset() {
 const Footer = () => {
   const { toast } = useToast();
   const { api } = useConnectionState();
-  const { wallet } = useWalletState();
+  const { wallet, address } = useWalletState();
   const { invalidateAssetsQuery, invalidateBalancesQuery } = useInvalidate();
   const {
     nextStep,
@@ -209,7 +209,7 @@ const Footer = () => {
     } else {
       setSending(false);
       invalidateAssetsQuery();
-      invalidateBalancesQuery();
+      invalidateBalancesQuery(address);
       toast({
         title: "Asset created successfully 🚀",
         description: "Congrats! Your asset was created! 🎉",

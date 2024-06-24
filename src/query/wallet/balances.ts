@@ -119,7 +119,10 @@ export const useBalances = () => {
   }, [api, refetch, assetsMetadata, address, setLoaded]);
 
   useEffect(() => {
+    console.log("NEW_:", balances);
     if (api && balances !== undefined && Object.keys(balances)?.length > 0) {
+      console.log("set NEW_:", balances);
+
       setBalances(balances, address);
     }
   }, [balances, setBalances, address, api]);
