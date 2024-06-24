@@ -9,7 +9,7 @@ export const useInvalidate = () => {
 
   const invalidateBalancesQuery = (address: string) => {
     queryClient.invalidateQueries({
-      queryKey: ["balances", { address }],
+      queryKey: ["balances"],
     });
   };
 

@@ -115,8 +115,9 @@ function TransferPanel({}: Props) {
         variant: "destructive",
       });
     } else {
-      setSending(false);
       invalidateBalancesQuery(address);
+      setSending(false);
+
       toast({
         title: "Successfull transaction 🎉",
         description: `You sent ${tAmount} of ${assetInfo.info.symbol}.`,

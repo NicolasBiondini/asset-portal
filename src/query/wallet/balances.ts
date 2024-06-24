@@ -99,6 +99,8 @@ export const useBalances = () => {
   } = useQuery({
     queryKey: ["balances", { address }],
     queryFn: () => fetchBalances(api, address, assetsMetadata),
+    retry: 5,
+    retryDelay: 1000,
     // enabled:
     //   // the storedBalances[address] === undefined prevent refetching, if you want to refetch invalidate the query
     //   // because each time that the user change his address, this refetch
@@ -119,10 +121,7 @@ export const useBalances = () => {
   }, [api, refetch, assetsMetadata, address, setLoaded]);
 
   useEffect(() => {
-    console.log("NEW_:", balances);
     if (api && balances !== undefined && Object.keys(balances)?.length > 0) {
-      console.log("set NEW_:", balances);
-
       setBalances(balances, address);
     }
   }, [balances, setBalances, address, api]);
