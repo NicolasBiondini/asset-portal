@@ -105,7 +105,7 @@ function about({}: Props) {
                 Nachito
               </Link>
               {
-                ", Polkadot agent, co-founder of Dotcast, (author of the book) “Fearless Building” PBA book, and "
+                ", Polkadot agent, co-founder of Dotcast, (author of the book) “Sin miedo a construir” PBA book, and "
               }
               <Link
                 href={LINKS.socialMedia.twitter_nicolas}
