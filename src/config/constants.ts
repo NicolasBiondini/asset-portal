@@ -81,5 +81,5 @@ export const metadata = {
     "AssetPortal: Your gateway to the Polkadot ecosystem. View balances, transfer tokens, use XCM, explore DeFi, swap assets, add liquidity, and interact with NFTs all in one intuitive platform. Open source.",
   url: "https://assetportal.io/",
   image:
-    "https://asset.cloudinary.com/blogfilmania/8b0d75593415e10fdc900b3acc38734d",
+    "https://res.cloudinary.com/blogfilmania/image/upload/fl_preserve_transparency/v1719643012/Color_logo_with_background_iwvh3i.jpg?_s=public-apps",
 };
