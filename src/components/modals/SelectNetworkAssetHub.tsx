@@ -12,6 +12,7 @@ import { Web3Key } from "@/types/wallets";
 import AccountButton from "../AccountButton";
 import { Button } from "../ui/button";
 import { AssetHub } from "../icons/assets";
+import KusamaAssetHubIcon from "../icons/networks/KusamaAssetHubIcon";
 
 type Props = { children: JSX.Element | JSX.Element[] };
 
@@ -63,7 +64,7 @@ function SelectNetworkAssetHub({ children }: Props) {
             className="flex justify-between"
           >
             <div className="flex gap-2 items-center">
-              <AssetHub className="w-6 h-6" />
+              <KusamaAssetHubIcon className="w-6 h-6" />
               <p className="text-white font-unbounded font-bold">
                 Kusama Asset Hub
               </p>

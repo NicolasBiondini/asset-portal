@@ -74,3 +74,12 @@ export const WIP_WORDS = [
   "breathtaking",
   "awe-inspiring",
 ];
+
+export const metadata = {
+  title: "AssetPortal",
+  description:
+    "AssetPortal: Your gateway to the Polkadot ecosystem. View balances, transfer tokens, use XCM, explore DeFi, swap assets, add liquidity, and interact with NFTs all in one intuitive platform. Open source.",
+  url: "https://assetportal.io/",
+  image:
+    "https://asset.cloudinary.com/blogfilmania/8b0d75593415e10fdc900b3acc38734d",
+};

@@ -511,7 +511,7 @@ const CongratsStep = () => {
             </Link>
             .
           </p>
-          <p className="text-xs m-0 text-colors-font-primary">
+          {/* <p className="text-xs m-0 text-colors-font-primary">
             Also, thank you for sharing your experience on Twitter!{" "}
             <Link href={"/transfer"}>
               <Button className="p-0 text-xs m-0 h-auto" variant={"link"}>
@@ -519,7 +519,7 @@ const CongratsStep = () => {
               </Button>
             </Link>{" "}
             to tweet about it and spread the word!{" "}
-          </p>
+          </p> */}
         </div>
       </div>
     </div>
