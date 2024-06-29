@@ -24,13 +24,6 @@ export const defiEcosystem: Parachain[] = [
   },
   {
     id: "4",
-    name: "Equilibrium",
-    description:
-      "Equilibrium is a cross-chain money market protocol that combines lending, synthetic asset generation, and stablecoin issuance within the Polkadot ecosystem.",
-    link: "https://equilibrium.io",
-  },
-  {
-    id: "5",
     name: "Interlay",
     description:
       "Interlay is a decentralized network that bridges Bitcoin to Polkadot, allowing BTC to be used in DeFi applications on Polkadot, providing secure and trustless Bitcoin interoperability.",

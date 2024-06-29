@@ -354,7 +354,7 @@ const InfoStep = () => {
             value={symbol.value}
             onChange={(e) => handleChangeSymbol(e)}
             type="text"
-            placeholder="Example: USCD, DOT, etc"
+            placeholder="Example: USDC, DOT, etc"
           />
           {!!symbol.err && (
             <p className=" text-sm pl-1 font-bold text-red-700">{symbol.err}</p>
