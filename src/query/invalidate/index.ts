@@ -1,7 +1,7 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { queryClientFinal } from "@/data/queryClient/queryClientInstance";
 
 export const useInvalidate = () => {
-  const queryClient = useQueryClient();
+  const queryClient = queryClientFinal;
 
   const invalidateAssetsQuery = () => {
     queryClient.invalidateQueries({ queryKey: ["assets"] });
