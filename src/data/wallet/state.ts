@@ -1,7 +1,6 @@
 import { AssetMetadata } from "@/types/asset";
 import { Balance } from "@/types/balance";
 import { Wallet, Web3Key } from "@/types/wallets";
-import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 
 export interface InitialState {
   loaded: boolean;

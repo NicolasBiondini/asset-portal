@@ -17,6 +17,11 @@ export const useUIState = create<UIState>()((set) => {
   return {
     ...getInitialStorageState(),
     setMode: (mode) => set((state) => ({ ...state, mode })),
+    setTermsAccepted: (termsAccepted) => {
+      const newState = { termsAccepted };
+      set((state) => ({ ...state, termsAccepted }));
+      localStorage.setItem("terms", JSON.stringify(newState));
+    },
     // Transfer UI
     setTransferData: (data) => setPageData("transfer", data),
     setTransferAmount: (amount) => setPageData("transfer", { amount }),

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import NavModal from "./NavModal";
 import AddIcon from "./icons/AddIcon";
@@ -21,6 +21,7 @@ import { useRouter } from "next/router";
 import SelectNetworkAssetHub from "./modals/SelectNetworkAssetHub";
 import AssetPortal from "./icons/assets/AssetPortal";
 import Metadata from "./Metadata";
+import AcceptTermsModal from "./modals/AceptTermsModal";
 type Props = {
   children: JSX.Element | JSX.Element[];
 };
@@ -43,10 +44,27 @@ function Layout({ children }: Props) {
   // Fetch user balances
   useBalances();
 
+  const [open, setOpen] = useState(false);
+  const handleOpenModal = () => {
+    setOpen(false);
+  };
+
   const rourter = useRouter();
 
   const { mode } = useUIState();
   const { address } = useWalletState();
+
+  useEffect(() => {
+    const terms = localStorage.getItem("terms");
+    if (!terms) return setOpen(true);
+
+    const finalTerms: { termsAccepted: boolean } = JSON.parse(terms);
+    if (finalTerms.termsAccepted) {
+      return;
+    }
+    setOpen(true);
+  }, [setOpen]);
+
   return (
     <>
       <Metadata {...metadata} />
@@ -58,6 +76,12 @@ function Layout({ children }: Props) {
           { dark: mode === "dark" }
         )}
       >
+        <AcceptTermsModal
+          open={open}
+          handleClick={handleOpenModal}
+          setOpen={setOpen}
+        />
+
         <nav className="flex justify-between px-5 items-center h-[120px]  md:h-[70px] sticky top-0 left-0 w-full !bg-background z-10">
           <NavModal />
           <div className="hidden lg:flex font-unbounded items-center gap-2">

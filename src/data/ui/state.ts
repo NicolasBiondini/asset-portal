@@ -5,6 +5,7 @@ export type Page = "transfer" | "teleport" | "create";
 
 export interface InitialState {
   mode: "light" | "dark";
+  termsAccepted: boolean;
   pages: {
     transfer: {
       tokenId: string;
@@ -30,6 +31,8 @@ export interface InitialState {
 
 export interface UIState extends InitialState {
   setMode: (mode: "light" | "dark") => void;
+  setTermsAccepted: (termsAccepted: boolean) => void;
+
   // Transfer page
   setTransferData: ({ ...data }: InitialState["pages"]["transfer"]) => void;
   setTransferAmount: (amount: string) => void;
@@ -54,6 +57,7 @@ export interface UIState extends InitialState {
 
 export const initialState: InitialState = {
   mode: "dark",
+  termsAccepted: true,
   pages: {
     transfer: {
       tokenId: "DOT",
