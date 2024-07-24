@@ -10,7 +10,7 @@ import {
   SendHorizonal,
   Twitter,
 } from "lucide-react";
-export const RPC_ENDPOINT = "wss://asset-hub-polkadot-rpc.dwellir.com/";
+export const RPC_ENDPOINT = "wss://rpc-asset-hub-polkadot.luckyfriday.io/";
 export const LINKS: {
   wallets: { "polkadot-js": string; talisman: string; "subwallet-js": string };
   socialMedia: {
